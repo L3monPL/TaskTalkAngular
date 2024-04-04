@@ -1,0 +1,11 @@
+main{
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: row;
+
+    app-company-list-nav-bar{
+        width: 60px;
+        max-width: 60px;
+    }
+}

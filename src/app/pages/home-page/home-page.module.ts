@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './home-page.component';
+import { CompanyListNavBarComponent } from '../../components/interface/company-list-nav-bar/company-list-nav-bar.component';
 
 const routes: Routes=[
   {
@@ -40,6 +41,7 @@ const routes: Routes=[
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    CompanyListNavBarComponent
   ]
 })
 export class HomePageModule { }
