@@ -1,0 +1,21 @@
+<section [formGroup]="loginForm">
+    <div class="card">
+        <h1>Sign In</h1>
+        <div class="input_section_container">
+            <div class="input_container">
+                <p>LOGIN</p>
+                <input formControlName="login" type="text">
+            </div>
+            <div class="input_container">
+                <p>PASSWORD</p>
+                <input formControlName="password" (keyup.enter)="submit()"  type="text">
+            </div>
+        </div>
+        <div class="remember_container">
+            <a>Remind password</a>
+        </div>
+        <div class="btn_container">
+            <button (click)="submit()">Log In</button>
+        </div>
+    </div>
+</section>

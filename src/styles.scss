@@ -1,3 +1,7 @@
+body{
+    margin: 0px;
+    padding: 0px;
+}
 :root {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
@@ -6,6 +10,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    --primary: #f8ebea;
-    --secondary: #5a4947;
+    // --primary: #292948; 22223b 272734 282830
+    // --secondary: #9C3A5A; f39a0b c6ac8f
+
+    --primary: #272734;
+    --primary-second: #313338;
+    --secondary: #c6ac8f;
+    --dark: #1e1f22;
+    --font-white: #fff;
+    --font-gray: #b5bac1;
 }

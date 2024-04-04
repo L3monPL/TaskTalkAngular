@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginPageComponent } from './login-page.component';
 import { RouterModule, Routes } from '@angular/router';
+import { SignInComponent } from '../../components/login/sign-in/sign-in.component';
 
 const routes: Routes=[
   {
     path: '', 
     component:  LoginPageComponent,
     children: [
-      // {
-      //   path: 'login',
-      //   component: LoginComponent
-      // },
+      {
+        path: 'login',
+        component: SignInComponent
+      },
       // {
       //   path: 'przypomnij-haslo',
       //   loadComponent: () => import('../../components/login/remind-password/remind-password.component').then(c=>c.RemindPasswordComponent)

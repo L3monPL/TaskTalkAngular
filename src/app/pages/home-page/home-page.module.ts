@@ -28,8 +28,8 @@ const routes: Routes=[
     //     path: 'profil',
     //     loadChildren: () => import('../profile-page/profile-page.module').then(c=>c.ProfilePageModule),
     //   },
-    //   { path: '**', redirectTo: '', pathMatch:'full'}
     // ]
+    
   }
 ]
 
