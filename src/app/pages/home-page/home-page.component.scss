@@ -3,9 +3,10 @@ main{
 
     display: flex;
     flex-direction: row;
+    background-color: var(--primary-second);
 
     app-company-list-nav-bar{
-        width: 60px;
-        max-width: 60px;
+        width: 66px;
+        max-width: 66px;
     }
 }

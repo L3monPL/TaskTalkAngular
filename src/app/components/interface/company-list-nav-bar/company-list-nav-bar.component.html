@@ -4,7 +4,7 @@
     </div>
     <div class="company_container">
         @for (company of companyList; track $index) {
-            <div class="item_company">
+            <div (click)="selectCompany(company.id)" class="item_company">
                 {{company.shortName}}
             </div>
         }
