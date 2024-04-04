@@ -8,6 +8,12 @@ const routes: Routes=[
   {
     path: '', 
     component:  MainContentPageComponent,
+    children: [
+      {
+        path: 'chat/:id',
+        loadComponent: () => import('../../components/home/chat-room-company/chat-room-company.component').then(c=>c.ChatRoomCompanyComponent),
+      }
+    ]
   }
 ]
 
