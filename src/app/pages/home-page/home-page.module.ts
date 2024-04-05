@@ -41,7 +41,7 @@ const routes: Routes=[
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    CompanyListNavBarComponent
+    CompanyListNavBarComponent,
   ]
 })
 export class HomePageModule { }

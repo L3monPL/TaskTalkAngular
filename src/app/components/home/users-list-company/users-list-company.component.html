@@ -1,0 +1,15 @@
+<section>
+    <input type="text" placeholder="Search for user">
+    <ul>
+        @for (user of this.companyManagement.companyUserList; track $index) {
+            <li>
+                <div class="user_role">
+                    {{user.company_role}}
+                </div>
+                <div class="user_name">
+                    {{user.username}}
+                </div>
+            </li>
+        }
+    </ul>
+</section>
