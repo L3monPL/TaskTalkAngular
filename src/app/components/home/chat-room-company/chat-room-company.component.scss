@@ -1,3 +1,44 @@
 :host{
     flex: 1;
 }
+.chat_container{
+    padding: 1rem;
+    overflow: hidden;
+    height: 100dvh;
+    max-height: 100dvh;
+
+    .messages_container{
+        max-height: calc(100dvh - 5rem);
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+    }
+    .message_item{
+        // background-color: var(--primary-3);
+        border-radius: 4px;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: row;
+        column-gap: 0.5rem;
+        align-items: end;
+
+        .user_icon{
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+        .username_item{
+            font-size: 0.7rem;
+            color: var(--font-gray);
+            padding-bottom: 4px;
+        }
+        .message_container{
+            background-color: var(--primary-3);
+            color: var(--font-white);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+    }
+}

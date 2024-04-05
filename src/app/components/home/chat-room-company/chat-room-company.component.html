@@ -3,7 +3,18 @@
     <div class="messages_container">
         @for (item of this.messages; track $index) {
             <div class="message_item">
-                {{item.message}} - {{item.userId}}
+                <div class="user_icon">
+
+                </div>
+                <div class="chat_container_item">
+                    <div class="username_item">
+                        {{item.userId}}
+                    </div>
+                    <div class="message_container">
+                        {{item.message}}
+                    </div>
+                </div>
+
             </div>
         }
     </div>
