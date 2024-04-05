@@ -1,1 +1,14 @@
-<p>chat-room-company works!</p>
+<div class="chat_container">
+    <button (click)="loadMoreMessages()">Load More</button>
+    <div class="messages_container">
+        @for (item of this.messages; track $index) {
+            <div class="message_item">
+                {{item.message}}
+            </div>
+        }
+    </div>
+    <div class="inputs">
+        <input [(ngModel)]="this.inputMessage" (keyup.enter)="sendMessage()" type="text" placeholder="Wiadomość...">
+        <button (click)="this.sendMessage()">wyślij</button>
+    </div>
+</div>

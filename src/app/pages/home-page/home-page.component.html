@@ -1,4 +1,6 @@
-<main>
-    <app-company-list-nav-bar [companyList]="companyList"></app-company-list-nav-bar>
-    <router-outlet></router-outlet>
-</main>
+@if (this.websocketService.isConnectedWebSocket) {
+    <main>
+        <app-company-list-nav-bar [companyList]="companyList"></app-company-list-nav-bar>
+        <router-outlet></router-outlet>
+    </main>
+}

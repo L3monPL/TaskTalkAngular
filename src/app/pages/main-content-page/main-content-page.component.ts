@@ -27,7 +27,6 @@ export class MainContentPageComponent implements OnInit{
       this.idParam = Number(params.get('id')!)
       this.getCompanyChatRoomList(this.idParam)
     });
-
   }
 
   subCompanyChatRoomList?: Subscription

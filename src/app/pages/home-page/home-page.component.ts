@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Company, CompanyService } from '../../services/rest/company.service';
+import { WebsocketService } from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-home-page',
@@ -11,10 +12,12 @@ import { Company, CompanyService } from '../../services/rest/company.service';
 export class HomePageComponent implements OnInit{
 
   constructor(
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    public websocketService: WebsocketService
   ) { }
 
   ngOnInit(): void {
+    this.websocketService.connect()
     this.getCompanyList()
   }
 
