@@ -1,7 +1,9 @@
 <main>
-    <app-side-bar-control 
-    [companyChatRoomList]="companyChatRoomList"
-    [companyId]="this.idParam"
-    ></app-side-bar-control>
-    <router-outlet></router-outlet>
+    @if (this.companyManagement.companyUserList?.length) {
+        <app-side-bar-control 
+        [companyChatRoomList]="companyChatRoomList"
+        [companyId]="this.idParam"
+        ></app-side-bar-control>
+        <router-outlet></router-outlet>
+    }
 </main>

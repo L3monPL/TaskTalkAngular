@@ -9,6 +9,13 @@ export interface Company{
   createdAt: string
   enable: boolean
 }
+export interface UserCompany{
+  id: number
+  username: string
+  email: string
+  phone: string
+  company_role: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +34,15 @@ export class CompanyService {
 
   getCompanyList(): Observable<HttpResponse<Array<Company>>> {
     return this.http.get<Array<Company>>(this.PATH + `/list`, {
+      observe: 'response',
+      responseType: 'json'
+    })
+  }
+
+  //------------------------------------------------------------------------//
+
+  getCompanyUserList(companyId: number): Observable<HttpResponse<Array<UserCompany>>> {
+    return this.http.get<Array<UserCompany>>(this.PATH + `/${companyId}/users`, {
       observe: 'response',
       responseType: 'json'
     })

@@ -4,6 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { CompanyManagementService } from '../../../services/global/company-management.service';
+
+export interface ChatRoomMessage{
+  id: number
+  roomId: number
+  userId: number|string
+  message: string|null
+  fileId: number|null
+  replyToId: number|null
+  edited: boolean
+  createdAt: string
+}
 
 @Component({
   selector: 'app-chat-room-company',
@@ -19,7 +31,8 @@ export class ChatRoomCompanyComponent implements OnInit{
 
   constructor( 
     public websocketService: WebsocketService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private companyManagementService: CompanyManagementService
   ) { }
 
   ngOnInit(): void {
@@ -45,7 +58,7 @@ export class ChatRoomCompanyComponent implements OnInit{
 
   inputMessage?: string
   isDuplicateMessage = false
-  messages: Array<any> = []
+  messages: Array<ChatRoomMessage> = []
 
   subTopicRoom?: Subscription
   subTopicRoomUser?: Subscription
@@ -54,9 +67,20 @@ export class ChatRoomCompanyComponent implements OnInit{
 
     // this.websocketService.stompClient.connect({}, ()=>{
       this.subTopicRoom = this.websocketService.stompClient.subscribe(`/topic/room/${this.idParam}`, (messages: any) => {
-        const messageContent = JSON.parse(messages.body)
-        // console.log(messageContent)
-        this.messages!.push(messageContent)
+        const messageContent: ChatRoomMessage = JSON.parse(messages.body)
+        console.log(messageContent)
+        let mappingMessage = {
+          id: messageContent.id,
+          roomId: messageContent.roomId,
+          userId: this.companyManagementService.companyUserList?.find(user => user.id == messageContent.userId)!.username!,
+          message: messageContent.message,
+          fileId: messageContent.fileId,
+          replyToId: messageContent.replyToId,
+          edited: messageContent.edited,
+          createdAt: messageContent.createdAt
+
+        }
+        this.messages!.push(mappingMessage)
       })
 
       //get all messages by current user
@@ -72,8 +96,19 @@ export class ChatRoomCompanyComponent implements OnInit{
 
         let messageArray = this.messages
 
-        messageContent.forEach((element: any) => {
-          pullMessageArray.push(element)
+        messageContent.forEach((element: ChatRoomMessage) => {
+          let mappingMessage = {
+            id: element.id,
+            roomId: element.roomId,
+            userId: this.companyManagementService.companyUserList?.find(user => user.id == element.userId)!.username!,
+            message: element.message,
+            fileId: element.fileId,
+            replyToId: element.replyToId,
+            edited: element.edited,
+            createdAt: element.createdAt
+  
+          }
+          pullMessageArray.push(mappingMessage)
         });
 
         //sprawdzam duplikaty - to edit
