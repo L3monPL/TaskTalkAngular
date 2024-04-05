@@ -36,13 +36,15 @@ export class ChatRoomCompanyComponent implements OnInit{
       this.subTopicRoom?.unsubscribe()
       this.subTopicRoomUser?.unsubscribe()
       this.messages = new Array()
+      this.page = 0
+      this.isDuplicateMessage = false
       this.connectToRoom()
       this.joinTopicMessage()
     });
   }
 
   inputMessage?: string
-
+  isDuplicateMessage = false
   messages: Array<any> = []
 
   subTopicRoom?: Subscription
@@ -74,22 +76,28 @@ export class ChatRoomCompanyComponent implements OnInit{
           pullMessageArray.push(element)
         });
 
-        let isDuplicate = false
-
         //sprawdzam duplikaty - to edit
-        for (let i = 0; i < 10; i++) {
-          let obiekt = pullMessageArray[i];
-          // Sprawdzamy, czy obiekt z tablicy1 występuje w tablicy2
-          if (messageArray.includes(obiekt)) {
-            console.log('DUPLIKAT!')
-            isDuplicate = true 
+        // for (let i = 0; i < 10; i++) {
+        //   let obiekt = pullMessageArray[i];
+        //   // Sprawdzamy, czy obiekt z tablicy1 występuje w tablicy2
+        //   if (messageArray.includes(obiekt)) {
+        //     console.log('DUPLIKAT!')
+        //     isDuplicate = true 
+        //     return
+        //   }
+        // }
+
+        for (let index = 0; index < pullMessageArray!.length; index++) {
+          if (messageArray[index]?.id == pullMessageArray[index]?.id) {
+            // console.log('DUPLIKAT!')
+            this.isDuplicateMessage = true 
             return
           }
         }
 
-        console.log(isDuplicate)
+        console.log(this.isDuplicateMessage)
 
-        if (!isDuplicate) {
+        if (!this.isDuplicateMessage) {
           this.messages = [...pullMessageArray, ...messageArray]
         }
 

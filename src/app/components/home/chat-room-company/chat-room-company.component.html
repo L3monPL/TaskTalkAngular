@@ -1,5 +1,5 @@
 <div class="chat_container">
-    <button (click)="loadMoreMessages()">Load More</button>
+    <button [disabled]="this.isDuplicateMessage" (click)="loadMoreMessages()">Load More</button>
     <div class="messages_container">
         @for (item of this.messages; track $index) {
             <div class="message_item">
