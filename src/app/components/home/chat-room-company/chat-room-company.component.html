@@ -2,20 +2,41 @@
     <button [disabled]="this.isDuplicateMessage" (click)="loadMoreMessages()">Load More</button>
     <div class="messages_container">
         @for (item of this.messages; track $index) {
-            <div class="message_item">
-                <div class="user_icon">
-
-                </div>
-                <div class="chat_container_item">
-                    <div class="username_item">
-                        {{item.userId}}
+            @if (messageWithIcon(item)) {
+                <div class="message_item margin_bottom_message">
+                    <div class="user_icon">
+    
                     </div>
-                    <div class="message_container">
-                        {{item.message}}
+                    <div class="chat_container_item">
+                        <!-- <div class="username_item">
+                            {{item.userId}}
+                        </div> -->
+                        <div class="message_container">
+                            {{item.message}}
+                        </div>
+                        <!-- <div class="username_item">
+                            {{item.userId}}
+                        </div> -->
                     </div>
+    
                 </div>
-
-            </div>
+            }
+            @if (messageWithoutIcon(item)) {
+                <div class="message_item margin_left_message">
+                    <!-- <div class="user_icon">
+    
+                    </div> -->
+                    <div class="chat_container_item">
+                        <!-- <div class="username_item">
+                            {{item.userId}}
+                        </div> -->
+                        <div class="message_container">
+                            {{item.message}}
+                        </div>
+                    </div>
+    
+                </div>
+            }
         }
     </div>
     <div class="inputs">
