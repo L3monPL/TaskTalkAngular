@@ -8,7 +8,7 @@
     max-height: 100dvh;
 
     .messages_container{
-        max-height: calc(100dvh - 5rem);
+        height: calc(100dvh - 6rem);
         overflow-y: scroll;
         display: flex;
         flex-direction: column;
@@ -26,10 +26,6 @@
 
         .message_container{
             background-color: var(--dark)!important;
-            color: var(--font-white);
-            padding: 0.4rem 0.8rem;
-            border-radius: 16px;
-            text-align: justify;
         }
     }
     .chat_container_item{
@@ -62,7 +58,30 @@
             color: var(--font-white);
             padding: 0.4rem 0.8rem;
             border-radius: 16px;
-            text-align: justify;
+        }
+    }
+
+    ///////INPUT DOWN CONTAINER //////////////////////
+    .inputs{
+        flex: 1;
+        // border-radius: 4px;
+        // background-color: var(--dark);
+        // padding: 0.6rem;
+
+        display: flex;
+        flex-direction: row;
+
+        input{
+            margin: 0.5rem 0rem;
+            border-radius: 4px;
+            background-color: var(--dark);
+            box-sizing: border-box;
+            width: 100%;
+            height: 36px;
+            border: none;
+            outline: none;
+            padding: 0rem 0.5rem;
+            color: var(--font-white);
         }
     }
 }
