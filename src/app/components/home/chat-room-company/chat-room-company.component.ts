@@ -38,6 +38,8 @@ export class ChatRoomCompanyComponent implements OnInit{
     public userDataService: UserDataService
   ) { }
 
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
   ngOnInit(): void {
     this.checkUrl()
   }
@@ -85,16 +87,14 @@ export class ChatRoomCompanyComponent implements OnInit{
 
         }
         this.messages!.push(mappingMessage)
+        setTimeout(() => {
+          this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
+        }, 0);
       })
 
       //get all messages by current user
       this.subTopicRoomUser = this.websocketService.stompClient.subscribe(`/user/topic/room/${this.idParam}`, (messages: any) => {
         const messageContent = JSON.parse(messages.body)
-
-        // console.log("pobrane wiadomosci")
-        // console.log(messageContent)
-        // console.log("istniejace wiadomosci")
-        // console.log(this.messages)
 
         let pullMessageArray = new Array()
 
@@ -117,22 +117,17 @@ export class ChatRoomCompanyComponent implements OnInit{
         });
 
         //sprawdzam duplikaty - to edit
-        // for (let i = 0; i < 10; i++) {
-        //   let obiekt = pullMessageArray[i];
-        //   // Sprawdzamy, czy obiekt z tablicy1 występuje w tablicy2
-        //   if (messageArray.includes(obiekt)) {
-        //     console.log('DUPLIKAT!')
-        //     isDuplicate = true 
-        //     return
-        //   }
-        // }
-
         for (let index = 0; index < pullMessageArray!.length; index++) {
           if (messageArray[index]?.id == pullMessageArray[index]?.id) {
-            // console.log('DUPLIKAT!')
             this.isDuplicateMessage = true 
             return
           }
+        }
+
+        console.log(messageContent)
+        //sprawdzam czy zwrociło mi nowe wiadomości, jeśli tak to pozwalam na pobieranie kolejnej strony
+        if (messageContent && !this.isDuplicateMessage) {
+          this.canLoadNextPage = true
         }
 
 
@@ -154,7 +149,7 @@ export class ChatRoomCompanyComponent implements OnInit{
 
           this.scrollContainer!.nativeElement.scrollTop = heightDifference;
           console.log(this.scrollContainer!.nativeElement.scrollTop)
-        });
+        }, 0);
       })
   }
 
@@ -175,9 +170,14 @@ export class ChatRoomCompanyComponent implements OnInit{
   }
 
   page = 0
+  canLoadNextPage = true
 
   loadMoreMessages(){
+    if (!this.canLoadNextPage) {
+      return
+    }
     this.page = this.page + 1
+    this.canLoadNextPage = false
     this.loadPageMessageToRoom(this.page)
   }
 
@@ -255,23 +255,25 @@ export class ChatRoomCompanyComponent implements OnInit{
     }
   }
 
-  @ViewChild('scrollContainer') scrollContainer?: ElementRef;
   // previousScrollPosition: number = 0;
   // previousContentHeight: number = 0;
 
-  // @HostListener('scroll', ['$event'])
-  // onElementScroll(event) {
-  //   // Pobierz element, na którym wywołano zdarzenie scroll
-  //   const element = this.elementRef.nativeElement;
+  @HostListener('scroll', ['$event'])
+  onScroll(event: any) {
+    // Pobierz element, na którym wywołano zdarzenie scroll
+    const element = this.scrollContainer.nativeElement
 
-  //   // Sprawdź wartość scrollTop dla tego elementu
-  //   let scrollTop = element.scrollTop;
+    if (element) {
+      // Sprawdź wartość scrollTop dla tego elementu
+      let scrollTop = element.scrollTop;
 
-  //   // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
-  //   if (scrollTop < 200) {
-  //     // Tutaj możesz wykonać jakieś działanie
-  //     console.log('Scroll top is less than 200');
-  //   }
-  // }
+      // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
+      if (scrollTop < 30) {
+        // Tutaj możesz wykonać jakieś działanie
+        this.loadMoreMessages()
+        console.log('Scroll top is less than 300');
+      } 
+    }
+  }
 
 }
