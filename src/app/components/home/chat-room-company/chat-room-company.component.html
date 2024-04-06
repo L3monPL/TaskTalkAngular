@@ -8,9 +8,11 @@
     
                     </div>
                     <div class="chat_container_item">
-                        <!-- <div class="username_item">
-                            {{item.userId}}
-                        </div> -->
+                        @if (messageWithUsername(item)) {
+                            <div class="username_item">
+                                {{item.userId}}
+                            </div>
+                        }
                         <div class="message_container">
                             {{item.message}}
                         </div>
@@ -23,13 +25,12 @@
             }
             @if (messageWithoutIcon(item)) {
                 <div class="message_item margin_left_message">
-                    <!-- <div class="user_icon">
-    
-                    </div> -->
                     <div class="chat_container_item">
-                        <!-- <div class="username_item">
-                            {{item.userId}}
-                        </div> -->
+                        @if (messageWithUsername(item)) {
+                            <div class="username_item">
+                                {{item.userId}}
+                            </div>
+                        }
                         <div class="message_container">
                             {{item.message}}
                         </div>

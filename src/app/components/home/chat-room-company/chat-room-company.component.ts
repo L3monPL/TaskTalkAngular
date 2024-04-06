@@ -165,7 +165,6 @@ export class ChatRoomCompanyComponent implements OnInit{
 
   loadMoreMessages(){
     this.page = this.page + 1
-    console.log(this.page)
     this.loadPageMessageToRoom(this.page)
   }
 
@@ -175,7 +174,6 @@ export class ChatRoomCompanyComponent implements OnInit{
 
   messageWithIcon(item: ChatRoomMessage){
     let messageIndex = this.messages.indexOf(item)
-    console.log(messageIndex)
 
     if (!this.messages[messageIndex]?.createdAt ) {
       return false
@@ -190,17 +188,14 @@ export class ChatRoomCompanyComponent implements OnInit{
     }
 
     if (Math.abs(currentDate.getTime() - dateNext.getTime()) > (5 * 60 * 1000)) {
-      console.log("Różnica wynosi więcej niż 5 minut.");
       return true
     } else {
-      console.log("Różnica wynosi mniej niż 5 minut.");
       return false
     }
   }
 
   messageWithoutIcon(item: ChatRoomMessage){
     let messageIndex = this.messages.indexOf(item)
-    console.log(messageIndex)
 
     if (!this.messages[messageIndex]?.createdAt ) {
       return false
@@ -215,18 +210,32 @@ export class ChatRoomCompanyComponent implements OnInit{
     }
 
     if (Math.abs(currentDate.getTime() - dateNext.getTime()) > (5 * 60 * 1000)) {
-      console.log("Różnica wynosi więcej niż 5 minut.");
       return false
     } else {
-      console.log("Różnica wynosi mniej niż 5 minut.");
-
-      // if (!dateBack) {
-      //   return false
-      // }
-
       return true
     }
+  }
 
+  messageWithUsername(item: ChatRoomMessage){
+    let messageIndex = this.messages.indexOf(item)
+
+    if (!this.messages[messageIndex]?.createdAt ) {
+      return false
+    }
+
+    let currentDate = new Date(this.messages[messageIndex]?.createdAt)
+    let dateBack = new Date(this.messages[messageIndex - 1]?.createdAt)
+    let dateNext = new Date(this.messages[messageIndex + 1]?.createdAt)
+
+    if (!this.messages[messageIndex - 1]?.createdAt) {
+        return true
+    }
+
+    if (Math.abs(currentDate.getTime() - dateBack.getTime()) > (5 * 60 * 1000)) {
+      return true
+    } else {
+      return false
+    }
   }
 
 }
