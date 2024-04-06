@@ -42,10 +42,11 @@
             padding-top: 4px;
         }
         .message_container{
-            background-color: var(--primary-3);
+            // background-color: var(--primary-3);
+            background-color: #393c42;
             color: var(--font-white);
-            padding: 0.5rem;
-            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 16px;
         }
     }
 }
