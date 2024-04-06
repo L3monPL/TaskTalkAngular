@@ -3,33 +3,36 @@
     <div class="messages_container">
         @for (item of this.messages; track $index) {
             @if (messageWithIcon(item)) {
-                <div class="message_item margin_bottom_message">
-                    <div class="user_icon">
+                <div [ngClass]="{'message_item_current_user': item.userId == this.userDataService.getId()}" class="message_item margin_bottom_message">
+                    @if (item.userId != this.userDataService.getId()) {
+                        <div class="user_icon">
     
-                    </div>
+                        </div>
+                    }
                     <div class="chat_container_item">
                         @if (messageWithUsername(item)) {
-                            <div class="username_item">
-                                {{item.userId}}
-                            </div>
+                            @if (item.userId != this.userDataService.getId()) {
+                                <div class="username_item">
+                                    {{item.username}}
+                                </div>
+                            }
                         }
                         <div class="message_container">
                             {{item.message}}
                         </div>
-                        <!-- <div class="username_item">
-                            {{item.userId}}
-                        </div> -->
                     </div>
     
                 </div>
             }
             @if (messageWithoutIcon(item)) {
-                <div class="message_item margin_left_message">
+                <div [ngClass]="{'message_item_current_user': item.userId == this.userDataService.getId()}" class="message_item margin_left_message">
                     <div class="chat_container_item">
                         @if (messageWithUsername(item)) {
-                            <div class="username_item">
-                                {{item.userId}}
-                            </div>
+                            @if (item.userId != this.userDataService.getId()) {
+                                <div class="username_item">
+                                    {{item.username}}
+                                </div>
+                            }
                         }
                         <div class="message_container">
                             {{item.message}}

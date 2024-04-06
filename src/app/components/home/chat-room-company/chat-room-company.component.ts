@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompanyManagementService } from '../../../services/global/company-management.service';
+import { UserDataService } from '../../../services/global/user-data.service';
 
 export interface ChatRoomMessage{
   id: number
   roomId: number
   userId: number|string
+  username: string|null
   message: string|null
   fileId: number|null
   replyToId: number|null
@@ -32,7 +34,8 @@ export class ChatRoomCompanyComponent implements OnInit{
   constructor( 
     public websocketService: WebsocketService,
     private route: ActivatedRoute,
-    private companyManagementService: CompanyManagementService
+    private companyManagementService: CompanyManagementService,
+    public userDataService: UserDataService
   ) { }
 
   ngOnInit(): void {
@@ -72,7 +75,8 @@ export class ChatRoomCompanyComponent implements OnInit{
         let mappingMessage = {
           id: messageContent.id,
           roomId: messageContent.roomId,
-          userId: this.companyManagementService.companyUserList?.find(user => user.id == messageContent.userId)!.username!,
+          userId: messageContent.userId,
+          username: this.companyManagementService.companyUserList?.find(user => user.id == messageContent.userId)?.username!,
           message: messageContent.message,
           fileId: messageContent.fileId,
           replyToId: messageContent.replyToId,
@@ -100,7 +104,8 @@ export class ChatRoomCompanyComponent implements OnInit{
           let mappingMessage = {
             id: element.id,
             roomId: element.roomId,
-            userId: this.companyManagementService.companyUserList?.find(user => user.id == element.userId)!.username!,
+            userId: element.userId,
+            username: this.companyManagementService.companyUserList?.find(user => user.id == element.userId)?.username!,
             message: element.message,
             fileId: element.fileId,
             replyToId: element.replyToId,
@@ -229,6 +234,10 @@ export class ChatRoomCompanyComponent implements OnInit{
 
     if (!this.messages[messageIndex - 1]?.createdAt) {
         return true
+    }
+
+    if (this.messages[messageIndex - 1].userId == this.userDataService.getId()) {
+      return true
     }
 
     if (Math.abs(currentDate.getTime() - dateBack.getTime()) > (5 * 60 * 1000)) {
