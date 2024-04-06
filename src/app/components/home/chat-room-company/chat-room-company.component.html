@@ -1,6 +1,6 @@
 <div class="chat_container">
     <button [disabled]="this.isDuplicateMessage" (click)="loadMoreMessages()">Load More</button>
-    <div class="messages_container">
+    <div #scrollContainer class="messages_container">
         @for (item of this.messages; track $index) {
             @if (messageWithIcon(item)) {
                 <div [ngClass]="{'message_item_current_user': item.userId == this.userDataService.getId()}" class="message_item margin_bottom_message">

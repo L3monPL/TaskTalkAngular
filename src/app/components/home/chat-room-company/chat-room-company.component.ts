@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -91,10 +91,10 @@ export class ChatRoomCompanyComponent implements OnInit{
       this.subTopicRoomUser = this.websocketService.stompClient.subscribe(`/user/topic/room/${this.idParam}`, (messages: any) => {
         const messageContent = JSON.parse(messages.body)
 
-        console.log("pobrane wiadomosci")
-        console.log(messageContent)
-        console.log("istniejace wiadomosci")
-        console.log(this.messages)
+        // console.log("pobrane wiadomosci")
+        // console.log(messageContent)
+        // console.log("istniejace wiadomosci")
+        // console.log(this.messages)
 
         let pullMessageArray = new Array()
 
@@ -135,19 +135,27 @@ export class ChatRoomCompanyComponent implements OnInit{
           }
         }
 
-        console.log(this.isDuplicateMessage)
+
+        const previousScrollPosition = this.scrollContainer?.nativeElement.scrollTop;
+        // this.previousContentHeight = this.scrollContainer?.nativeElement.scrollHeight;
+        const previousHeight = this.scrollContainer?.nativeElement.scrollHeight;
 
         if (!this.isDuplicateMessage) {
           this.messages = [...pullMessageArray, ...messageArray]
         }
 
-        console.log("wszystkie wiadomosci")
-        console.log(this.messages)
+        // Przewiń kontener do nowej pozycji
+        setTimeout(() => {
+          // Pobierz wysokość kontenera po dodaniu danych
+          const newHeight = this.scrollContainer!.nativeElement.scrollHeight;
 
+          // Oblicz różnicę w wysokości
+          const heightDifference = newHeight - previousHeight + previousScrollPosition;
+
+          this.scrollContainer!.nativeElement.scrollTop = heightDifference;
+          console.log(this.scrollContainer!.nativeElement.scrollTop)
+        });
       })
-
-    // })
-    // this.connectToRoom()
   }
 
   connectToRoom(){
@@ -246,5 +254,24 @@ export class ChatRoomCompanyComponent implements OnInit{
       return false
     }
   }
+
+  @ViewChild('scrollContainer') scrollContainer?: ElementRef;
+  // previousScrollPosition: number = 0;
+  // previousContentHeight: number = 0;
+
+  // @HostListener('scroll', ['$event'])
+  // onElementScroll(event) {
+  //   // Pobierz element, na którym wywołano zdarzenie scroll
+  //   const element = this.elementRef.nativeElement;
+
+  //   // Sprawdź wartość scrollTop dla tego elementu
+  //   let scrollTop = element.scrollTop;
+
+  //   // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
+  //   if (scrollTop < 200) {
+  //     // Tutaj możesz wykonać jakieś działanie
+  //     console.log('Scroll top is less than 200');
+  //   }
+  // }
 
 }
