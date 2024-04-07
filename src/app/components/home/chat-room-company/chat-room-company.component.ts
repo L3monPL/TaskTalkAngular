@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -29,7 +29,7 @@ export interface ChatRoomMessage{
   templateUrl: './chat-room-company.component.html',
   styleUrl: './chat-room-company.component.scss'
 })
-export class ChatRoomCompanyComponent implements OnInit{
+export class ChatRoomCompanyComponent implements OnInit, AfterViewInit{
 
   constructor( 
     public websocketService: WebsocketService,
@@ -39,6 +39,12 @@ export class ChatRoomCompanyComponent implements OnInit{
   ) { }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
+  ngAfterViewInit() {
+    if (this.scrollContainer) {
+      this.scrollContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+    }
+  }
 
   ngOnInit(): void {
     this.checkUrl()
@@ -88,7 +94,6 @@ export class ChatRoomCompanyComponent implements OnInit{
         }
 
         let scrollPosition = this.scrollContainer.nativeElement.scrollTop
-        console.log()
 
         this.messages!.unshift(mappingMessage)
         setTimeout(() => {
@@ -106,6 +111,8 @@ export class ChatRoomCompanyComponent implements OnInit{
       this.subTopicRoomUser = this.websocketService.stompClient.subscribe(`/user/topic/room/${this.idParam}`, (messages: any) => {
         const messageContent = JSON.parse(messages.body)
 
+        console.log(this.loadingNextPage)
+        
         let pullMessageArray = new Array()
 
         let messageArray = this.messages
@@ -172,35 +179,48 @@ export class ChatRoomCompanyComponent implements OnInit{
         // this.previousContentHeight = this.scrollContainer?.nativeElement.scrollHeight;
         this.previousHeight = this.scrollContainer?.nativeElement.scrollHeight;
         // console.log(this.previousHeight)
+        console.log("scrollTop1: " + this.scrollContainer!.nativeElement.scrollTop)
 
         if (!this.isDuplicateMessage) {
           // pullMessageArray!.reverse()
           this.messages.push(...pullMessageArray)
           // this.messages = [...pullMessageArray, ...messageArray]
         }
+        console.log("scrollTop: " + this.scrollContainer!.nativeElement.scrollTop)
+
+        let scrollTop = this.scrollContainer!.nativeElement.scrollTop
+
+        this.TODELETE_COUNT = this.TODELETE_COUNT + 1
 
         // Przewiń kontener do nowej pozycji
         setTimeout(() => {
 
-          // Pobierz wysokość kontenera po dodaniu danych
-          // const newHeight = this.scrollContainer!.nativeElement.scrollHeight;
-
-          // Oblicz różnicę w wysokości
+          this.scrollContainer!.nativeElement.scrollTop = scrollTop
           // const heightDifference = newHeight - previousHeight + previousScrollPosition;
 
           // this.scrollContainer!.nativeElement.scrollTop = heightDifference;
           console.log(this.scrollContainer!.nativeElement.scrollTop)
           this.beforeLoadNextPageScrollTop = this.scrollContainer!.nativeElement.scrollTop
-        });
+          this.loadingNextPage = false
+          console.log('countFunc: ' + this.TODELETE_COUNT)
+        }, 500);
+        // this.loadingNextPage = false
       })
       this.connectToRoom()
   }
 
+  TODELETE_COUNT = 0
+
   beforeLoadNextPageScrollTop?: number
   previousHeight?: number
+  isConnectedToRoom = false
 
   connectToRoom(){
+    if (this.isConnectedToRoom) {
+      return
+    }
     this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/message`, {}, JSON.stringify(0))
+    this.isConnectedToRoom = true
     console.log(`connect to room ${this.idParam}`)
   }
 
@@ -307,6 +327,8 @@ export class ChatRoomCompanyComponent implements OnInit{
 
   // previousScrollPosition: number = 0;
   // previousContentHeight: number = 0;
+  loadingNextPage: boolean = false
+
 
   @HostListener('scroll', ['$event'])
   onScroll(event: any) {
@@ -322,16 +344,85 @@ export class ChatRoomCompanyComponent implements OnInit{
       let suma = element.scrollHeight + scrollTop - this.previousHeight! - this.beforeLoadNextPageScrollTop! - 1
       // console.log("suma: " + (element.scrollHeight + scrollTop - this.previousHeight! - this.beforeLoadNextPageScrollTop!))
 
+
+      const itemHeight = this.scrollContainer.nativeElement.offsetHeight
+      const scrollContainer = this.scrollContainer.nativeElement.scrollHeight
+      const scrollTopTest = -event.target.scrollTop;
+      // console.log(scrollTopTest)
+      // console.log(itemHeight)
+      // console.log(scrollContainer)
+
+      let suma2 = scrollContainer - itemHeight
+      // console.log(suma2)
+
+      // const scrollTop = element.scrollTop;
+  const scrollHeight = element.scrollHeight;
+  const clientHeight = element.clientHeight;
+
+  // console.log(scrollTop + clientHeight)
+  // console.log(itemHeight)
+  // console.log(scrollHeight)
+
+  
+
+  // Sprawdź czy użytkownik przewinął stronę na górę
+  // if (scrollTop + clientHeight >= scrollHeight && !this.loadingNextPage) {
+  //   // Tutaj możesz wykonać jakieś działanie, np. załadować kolejne wiadomości
+  //   this.loadingNextPage = true
+  //   this.loadMoreMessages()
+  // }
+
+      // if ((suma2 - scrollTopTest) == 0 && (this.page % 2 !== 0)) {
+      //   console.log(this.page)
+      //   console.log("załaduj")
+
+      //   setTimeout(() => {
+      //     // Tutaj możesz wykonać jakieś działanie
+      //     if (!this.canLoadNextPage) {
+      //       return
+      //     }
+      //     this.loadMoreMessages()
+      //     return
+      //   });
+      // }
+      // if ((this.page % 2 === 0) && (suma2 - scrollTopTest) == 1) {
+      //   console.log(this.page)
+      //   console.log("załaduj")
+
+      //   // setTimeout(() => {
+      //     // Tutaj możesz wykonać jakieś działanie
+      //     // if (!this.canLoadNextPage) {
+      //     //   return
+      //     // }
+      //     this.loadMoreMessages()
+      //     // return
+      //   // });
+      // } 
+      
+
       // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
-      if (suma <= 0) {
-        setTimeout(() => {
+      // console.log("scrollTopOnScroll: " + this.scrollContainer!.nativeElement.scrollTop)
+      // console.log(suma)
+      // console.log(this.loadingNextPage)
+      if (this.loadingNextPage) {
+        console.log("this.loadingNextPage: " + this.loadingNextPage)
+        return
+      }
+      if (suma <= 1 && !this.loadingNextPage) {
+        // setTimeout(() => {
           // Tutaj możesz wykonać jakieś działanie
           if (!this.canLoadNextPage) {
             return
           }
+          // if (this.loadingNextPage) {
+          //   console.log("this.loadingNextPage: " + this.loadingNextPage)
+          //   return
+          // }
+          this.loadingNextPage = true
+          console.log("scrollTopOnScroll: " + this.scrollContainer!.nativeElement.scrollTop)
           this.loadMoreMessages()
           console.log('Scroll top is less than 300');
-        });
+        // });
       } 
     }
   }
