@@ -11,7 +11,8 @@
         height: calc(100dvh - 6rem);
         overflow-y: scroll;
         display: flex;
-        flex-direction: column;
+        // flex-direction: column;
+        flex-direction: column-reverse;
         row-gap: 3px;
     }
     .margin_left_message{

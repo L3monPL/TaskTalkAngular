@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -35,7 +35,7 @@ export class ChatRoomCompanyComponent implements OnInit{
     public websocketService: WebsocketService,
     private route: ActivatedRoute,
     private companyManagementService: CompanyManagementService,
-    public userDataService: UserDataService
+    public userDataService: UserDataService,
   ) { }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -53,10 +53,11 @@ export class ChatRoomCompanyComponent implements OnInit{
 
       this.subTopicRoom?.unsubscribe()
       this.subTopicRoomUser?.unsubscribe()
+      // this.subConnectToRoom?.unsubscribe()
       this.messages = new Array()
       this.page = 0
       this.isDuplicateMessage = false
-      this.connectToRoom()
+      // this.connectToRoom() // in the end of this.joinTopicMessage()
       this.joinTopicMessage()
     });
   }
@@ -84,12 +85,21 @@ export class ChatRoomCompanyComponent implements OnInit{
           replyToId: messageContent.replyToId,
           edited: messageContent.edited,
           createdAt: messageContent.createdAt
-
         }
-        this.messages!.push(mappingMessage)
+
+        let scrollPosition = this.scrollContainer.nativeElement.scrollTop
+        console.log()
+
+        this.messages!.unshift(mappingMessage)
         setTimeout(() => {
-          this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
-        }, 0);
+          if (!this.isSendMessageByMe) {
+            this.scrollContainer.nativeElement.scrollTop = scrollPosition
+          }
+          if (this.isSendMessageByMe) {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
+            this.isSendMessageByMe = false
+          }
+        });
       })
 
       //get all messages by current user
@@ -115,14 +125,41 @@ export class ChatRoomCompanyComponent implements OnInit{
           }
           pullMessageArray.push(mappingMessage)
         });
+        pullMessageArray!.reverse()
 
         //sprawdzam duplikaty - to edit
-        for (let index = 0; index < pullMessageArray!.length; index++) {
-          if (messageArray[index]?.id == pullMessageArray[index]?.id) {
+        // for (let index = 0; index < pullMessageArray!.length; index++) {
+
+        //   console.log(this.messages.indexOf(messageArray[index]))
+        //   console.log(pullMessageArray[index])
+
+        //   if (messageArray[index]?.id == pullMessageArray[index]?.id) {
+        //     this.isDuplicateMessage = true 
+        //     return
+        //   }
+        // }
+
+        const idsArray1 = this.messages.map(obj => obj.id);
+        const idsArray2 = pullMessageArray.map(obj => obj.id);
+
+        for (const id of idsArray1) {
+          if (idsArray2.includes(id)) {
             this.isDuplicateMessage = true 
             return
           }
         }
+        
+
+        // for (let index = 0; index < pullMessageArray!.length; index++) {
+
+        //   console.log(this.messages.indexOf(messageArray[index]))
+        //   console.log(pullMessageArray[index])
+
+        //   if (messageArray[index]?.id == pullMessageArray[index]?.id) {
+        //     this.isDuplicateMessage = true 
+        //     return
+        //   }
+        // }
 
         console.log(messageContent)
         //sprawdzam czy zwrociło mi nowe wiadomości, jeśli tak to pozwalam na pobieranie kolejnej strony
@@ -133,29 +170,41 @@ export class ChatRoomCompanyComponent implements OnInit{
 
         const previousScrollPosition = this.scrollContainer?.nativeElement.scrollTop;
         // this.previousContentHeight = this.scrollContainer?.nativeElement.scrollHeight;
-        const previousHeight = this.scrollContainer?.nativeElement.scrollHeight;
+        this.previousHeight = this.scrollContainer?.nativeElement.scrollHeight;
+        // console.log(this.previousHeight)
 
         if (!this.isDuplicateMessage) {
-          this.messages = [...pullMessageArray, ...messageArray]
+          // pullMessageArray!.reverse()
+          this.messages.push(...pullMessageArray)
+          // this.messages = [...pullMessageArray, ...messageArray]
         }
 
         // Przewiń kontener do nowej pozycji
         setTimeout(() => {
+
           // Pobierz wysokość kontenera po dodaniu danych
-          const newHeight = this.scrollContainer!.nativeElement.scrollHeight;
+          // const newHeight = this.scrollContainer!.nativeElement.scrollHeight;
 
           // Oblicz różnicę w wysokości
-          const heightDifference = newHeight - previousHeight + previousScrollPosition;
+          // const heightDifference = newHeight - previousHeight + previousScrollPosition;
 
-          this.scrollContainer!.nativeElement.scrollTop = heightDifference;
+          // this.scrollContainer!.nativeElement.scrollTop = heightDifference;
           console.log(this.scrollContainer!.nativeElement.scrollTop)
-        }, 0);
+          this.beforeLoadNextPageScrollTop = this.scrollContainer!.nativeElement.scrollTop
+        });
       })
+      this.connectToRoom()
   }
+
+  beforeLoadNextPageScrollTop?: number
+  previousHeight?: number
 
   connectToRoom(){
     this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/message`, {}, JSON.stringify(0))
+    console.log(`connect to room ${this.idParam}`)
   }
+
+  isSendMessageByMe = false
 
   sendMessage(){
     if (!this.inputMessage) {
@@ -165,6 +214,7 @@ export class ChatRoomCompanyComponent implements OnInit{
     let messageResponse = {
       message: this.inputMessage
     }
+    this.isSendMessageByMe = true
     this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/sendMessage`, {}, JSON.stringify(messageResponse))
     this.inputMessage = ''
   }
@@ -266,12 +316,22 @@ export class ChatRoomCompanyComponent implements OnInit{
     if (element) {
       // Sprawdź wartość scrollTop dla tego elementu
       let scrollTop = element.scrollTop;
+      // console.log("scrollTop: " + scrollTop)
+      // console.log("element.scrollHeight: " + element.scrollHeight)
+      // console.log("this.previousHeight: " + this.previousHeight)
+      let suma = element.scrollHeight + scrollTop - this.previousHeight! - this.beforeLoadNextPageScrollTop! - 1
+      // console.log("suma: " + (element.scrollHeight + scrollTop - this.previousHeight! - this.beforeLoadNextPageScrollTop!))
 
       // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
-      if (scrollTop < 30) {
-        // Tutaj możesz wykonać jakieś działanie
-        this.loadMoreMessages()
-        console.log('Scroll top is less than 300');
+      if (suma <= 0) {
+        setTimeout(() => {
+          // Tutaj możesz wykonać jakieś działanie
+          if (!this.canLoadNextPage) {
+            return
+          }
+          this.loadMoreMessages()
+          console.log('Scroll top is less than 300');
+        });
       } 
     }
   }
