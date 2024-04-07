@@ -56,7 +56,7 @@ export class ChatRoomCompanyComponent implements OnInit{
       this.messages = new Array()
       this.page = 0
       this.isDuplicateMessage = false
-      this.connectToRoom()
+      // this.connectToRoom()
       this.joinTopicMessage()
     });
   }
@@ -151,6 +151,7 @@ export class ChatRoomCompanyComponent implements OnInit{
           console.log(this.scrollContainer!.nativeElement.scrollTop)
         }, 0);
       })
+      this.connectToRoom()
   }
 
   connectToRoom(){
