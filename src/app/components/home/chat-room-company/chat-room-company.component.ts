@@ -204,9 +204,20 @@ export class ChatRoomCompanyComponent implements OnInit{
     }
 
     if (Math.abs(currentDate.getTime() - dateNext.getTime()) > (5 * 60 * 1000)) {
+      // if (this.messages[messageIndex + 1]?.userId != this.userDataService.getId()) {
+      //   return true
+      // }
+      // else {
+      //   return false
+      // }
       return true
     } else {
-      return false
+      if (this.messages[messageIndex + 1]?.userId == this.userDataService.getId()) {
+        return true
+      }
+      else {
+        return false
+      }
     }
   }
 
@@ -228,7 +239,12 @@ export class ChatRoomCompanyComponent implements OnInit{
     if (Math.abs(currentDate.getTime() - dateNext.getTime()) > (5 * 60 * 1000)) {
       return false
     } else {
-      return true
+      if (this.messages[messageIndex + 1]?.userId == this.userDataService.getId()) {
+        return false
+      }
+      else {
+        return true
+      }
     }
   }
 
