@@ -87,9 +87,11 @@ export class ChatRoomCompanyComponent implements OnInit{
 
         }
         this.messages!.push(mappingMessage)
-        setTimeout(() => {
-          this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
-        }, 0);
+        if (this.userDataService.getId() == messageContent.userId) {
+          setTimeout(() => {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
+          }, 0); 
+        }
       })
 
       //get all messages by current user
@@ -272,7 +274,7 @@ export class ChatRoomCompanyComponent implements OnInit{
       if (scrollTop < 30) {
         // Tutaj możesz wykonać jakieś działanie
         this.loadMoreMessages()
-        console.log('Scroll top is less than 300');
+        // console.log('Scroll top is less than 300');
       } 
     }
   }
