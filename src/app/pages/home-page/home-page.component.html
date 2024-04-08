@@ -1,4 +1,4 @@
-@if (this.websocketService.isConnectedWebSocket) {
+@if (this.websocketService.isConnectedWebSocket && !this.loadingValidateIsLogin) {
     <main>
         <app-company-list-nav-bar [companyList]="companyList"></app-company-list-nav-bar>
         <router-outlet></router-outlet>

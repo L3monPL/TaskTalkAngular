@@ -34,6 +34,15 @@ export class AuthService {
 
   //------------------------------------------------------------------------//
 
+  getUser(): Observable<HttpResponse<any>> {
+    return this.http.get<any>(this.PATH + `/user`, {
+      observe: 'response',
+      responseType: 'json'
+    })
+  }
+
+  //------------------------------------------------------------------------//
+
   //------------------------------------------------------------------------//
   // POST POST POST POST POST POST POST POST POST POST POST POST POST POST  //
   //------------------------------------------------------------------------//

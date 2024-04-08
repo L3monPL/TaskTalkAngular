@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 
+export interface User{
+  id: number
+  login: string
+  email: string
+  phone: string
+  role: string
+  lock: boolean
+  enabled: boolean
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
 
-  public user?: any = {
-    id: 30,
-    username: '2L3mon',
-    email: 'test',
-    phone: null
-  }
+  public user?: User
+
 
   constructor() { }
 
-  setUser(user: any){
+  setUser(user: User){
     this.user = user
   }
 
@@ -25,7 +31,7 @@ export class UserDataService {
     return this.user!.id
   }
   getUserName():string|undefined{
-    return this.user?.username
+    return this.user?.login
   }
 
   getEmail():string|undefined{
@@ -33,6 +39,15 @@ export class UserDataService {
   }
   getPhone():string|undefined{
     return this.user?.phone
+  }
+  getRole():string|undefined{
+    return this.user?.role
+  }
+  isEnabled():boolean|undefined{
+    return this.user?.enabled
+  }
+  isLock():boolean|undefined{
+    return this.user?.lock
   }
 
   
