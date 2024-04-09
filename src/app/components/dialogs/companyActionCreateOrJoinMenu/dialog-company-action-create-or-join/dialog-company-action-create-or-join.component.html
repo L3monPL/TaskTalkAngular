@@ -13,7 +13,7 @@
                     </svg>
                 </div>
     
-                <button (click)="selectComponent($event, 'create')" class="btn_create">Create</button>
+                <button (click)="selectOption($event, 'selectCompanyPlan')" class="btn_create">Create</button>
             </div>
             <div class="card_item">
                 <div class="top">
@@ -28,10 +28,10 @@
             </div>
         </div>
     }
-    @if (openCompanyComponent == 'create') {
-        <app-company-create (planSelect)="selectPlanFromComponent($event)"></app-company-create>
+    @if (openCompanyComponent == 'selectCompanyPlan') {
+        <app-company-plan-select (selectEmitter)="selectFromComponent($event)"></app-company-plan-select>
     }
-    <!-- @if (openCompanyComponent == 'create') {
-        component 
-    } -->
+    @if (openCompanyComponent == 'create') {
+        <app-company-create [selectTypePlanCompany]="selectTypePlanCompany" (selectEmitter)="selectFromComponent($event)"></app-company-create>
+    }
 </section>

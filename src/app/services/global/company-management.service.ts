@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CompanyService, UserCompany } from '../rest/company.service';
+import { EventEmitter, Injectable } from '@angular/core';
+import { Company, CompanyService, UserCompany } from '../rest/company.service';
 import { Subscription } from 'rxjs';
 
 @Injectable({
@@ -10,6 +10,13 @@ export class CompanyManagementService {
   constructor(
     private companyService: CompanyService,
   ) { }
+
+  //EMITTERY
+
+  companyListEmitter: EventEmitter<any> = new EventEmitter()
+  getCompanyListEmitterByCreate(company: Company){
+    this.companyListEmitter.emit(company)
+  }
 
   // lista użytkowników którzy znajdują sie w wybranej aktualnie firmie
 

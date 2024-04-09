@@ -54,6 +54,16 @@ export class CompanyService {
   // POST POST POST POST POST POST POST POST POST POST POST POST POST POST  //
   //------------------------------------------------------------------------//
 
+  postCompanyCreate(name: string, shortName: string): Observable<HttpResponse<Company>> {
+    return this.http.post<Company>(this.PATH + `/create`,{
+      name: name,
+      shortName: shortName
+    }, {
+      observe: 'response',
+      responseType: 'json'
+    })
+  }
+
   //------------------------------------------------------------------------//
 
   //------------------------------------------------------------------------//

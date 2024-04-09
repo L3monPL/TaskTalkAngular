@@ -4,6 +4,8 @@ import { Company, CompanyService } from '../../services/rest/company.service';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { AuthService } from '../../services/rest/auth.service';
 import { UserDataService } from '../../services/global/user-data.service';
+import { CompanyManagementService } from '../../services/global/company-management.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -17,13 +19,16 @@ export class HomePageComponent implements OnInit{
     private companyService: CompanyService,
     public websocketService: WebsocketService,
     private authService: AuthService,
-    private userDataService: UserDataService
+    private userDataService: UserDataService,
+    private companyManagement: CompanyManagementService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.websocketService.connect()
     this.getCompanyList()
     this.getUser()
+    this.subscribeGetComapyList()
   }
 
   subCompanyList?: Subscription
@@ -74,6 +79,17 @@ export class HomePageComponent implements OnInit{
       },
       complete: () => {
         this.loadingValidateIsLogin = false;
+      }
+    })
+  }
+
+  subCompanyListEmitter?: Subscription
+
+  subscribeGetComapyList(){
+    this.subCompanyListEmitter = this.companyManagement.companyListEmitter.subscribe(res => {
+      if (res.id) {
+        this.getCompanyList()
+        this.router.navigate([`/app/company/${res.id}`]) 
       }
     })
   }
