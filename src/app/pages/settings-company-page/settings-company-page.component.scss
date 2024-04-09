@@ -1,0 +1,19 @@
+:host{
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+section{
+    max-width: 1300px;
+    width: calc(100% - 4rem);
+    margin: 0rem 2rem;
+    display: flex;
+    flex-direction: row;
+}
+app-settings-company-nav{
+    width: 260px;
+    max-width: 260px;
+}

@@ -80,7 +80,7 @@ export class CompanyListNavBarComponent {
 
   onDocumentClick = (event: MouseEvent) => {
     const contextMenu = this.contextMenu.nativeElement as HTMLElement;
-    console.log(contextMenu)
+    // console.log(contextMenu)
     if (contextMenu && !contextMenu.contains(event.target as Node)) {
       // this.isContextMenuOpen = false;
       this.currentContextMenuCompany = null
