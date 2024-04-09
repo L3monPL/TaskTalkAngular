@@ -25,8 +25,79 @@ section{
         row-gap: 0.8rem;
         align-items: center;
         padding: 0.5rem 0rem;
+        // position: relative;
     }
+    .context_menu_container{
+        position: absolute;
+        background-color: var(--dark);
+        border-radius: 6px;
+        padding: 0.5rem;
+        left: 62px;
+        width: 208px;
+        top: 0px;
+        z-index: 999;
 
+        .company_name_context_menu{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0px 6px;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #fff;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+        ul{
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            // row-gap: 6px;
+
+            li{
+                white-space: nowrap;
+                padding: 6px 6px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                // column-gap: 3rem;
+                transition: 0.3s;
+                border-radius: 4px;
+                cursor: pointer;
+
+                p{
+                    margin: 0px;
+                    color: var(--font-white);
+                }
+                svg{
+                    fill: var(--font-white);
+                }
+            }
+            li:hover{
+                background-color: var(--hover-gray);
+                transition: 0.3s;
+            }
+            .li_invite_users{
+
+                p{
+                    color: var(--orange)!important;
+                }
+                svg{
+                    fill: var(--orange)!important;
+                }
+            }
+        }
+    }
+    .item_relative_container{
+        position: relative;
+    }
+    // .right_setect_company{
+    //     border: 2px solid var(--orange)!important;
+    //     // background-color: var(--orange)!important;
+    //     transition: 0.3s;
+    // }
     .item_company{
         background-color: #FFF;
         height: 46px;
@@ -37,13 +108,14 @@ section{
         color: #000;
         cursor: pointer;
         transition: 0.3s;
+        border: 2px solid #fff;
 
         display: flex;
         align-items: center;
         justify-content: center;
     }
     .item_company:hover{
-        transform: scale(1.1);
+        transform: scale(1.08);
         border-radius: 10px;
         transition: 0.3s;
     }

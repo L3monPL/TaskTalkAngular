@@ -1,5 +1,5 @@
 @if (this.websocketService.isConnectedWebSocket && !this.loadingValidateIsLogin) {
-    <main>
+    <main (contextmenu)="false">
         <app-company-list-nav-bar [companyList]="companyList"></app-company-list-nav-bar>
         <router-outlet></router-outlet>
     </main>

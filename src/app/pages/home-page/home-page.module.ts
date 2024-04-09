@@ -13,10 +13,10 @@ const routes: Routes=[
         path: 'company/:id',
         loadChildren: () => import('../main-content-page/main-content-page.module').then(c=>c.MainContentPageModule),
       },
-      // {
-      //   path: 'produkty',
-      //   loadChildren: () => import('../products-list-search-page/products-list-search-page.module').then(c=>c.ProductsListSearchPageModule),
-      // },
+      {
+        path: 'company/:id/settings',
+        loadChildren: () => import('../settings-company-page/settings-company-page.module').then(c=>c.SettingsCompanyPageModule),
+      },
       // {
       //   path: 'koszyk',
       //   loadComponent: () => import('../shopping-cart-page/shopping-cart-page.component').then(c=>c.ShoppingCartPageComponent),
