@@ -7,11 +7,16 @@
     justify-content: center;
 }
 section{
-    max-width: 1300px;
+    max-width: 1000px;
     width: calc(100% - 4rem);
     margin: 0rem 2rem;
     display: flex;
     flex-direction: row;
+    overflow-y: scroll;
+}
+.router_container{
+    flex: 1;
+    background-color: var(--primary-3);
 }
 app-settings-company-nav{
     width: 260px;

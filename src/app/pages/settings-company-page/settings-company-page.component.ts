@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './settings-company-page.component.html',
   styleUrl: './settings-company-page.component.scss'
 })
-export class SettingsCompanyPageComponent {
+export class SettingsCompanyPageComponent{
 
 }
