@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -29,7 +29,7 @@ export interface ChatRoomMessage{
   templateUrl: './chat-room-company.component.html',
   styleUrl: './chat-room-company.component.scss'
 })
-export class ChatRoomCompanyComponent implements OnInit{
+export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
   constructor( 
     public websocketService: WebsocketService,
@@ -44,21 +44,32 @@ export class ChatRoomCompanyComponent implements OnInit{
     this.checkUrl()
   }
 
+  ngOnDestroy(): void {
+    this.subRouteParam?.unsubscribe() 
+    this.unsubscribeList()
+  }
+
   idParam?: number
+  subRouteParam?: Subscription
 
   checkUrl() {
-    this.route.paramMap.subscribe(params => {
+    this.subRouteParam = this.route.paramMap.subscribe(params => {
       this.idParam = Number(params.get('id')!)
       console.log(this.idParam)
 
-      this.subTopicRoom?.unsubscribe()
-      this.subTopicRoomUser?.unsubscribe()
       this.messages = new Array()
       this.page = 0
       this.isDuplicateMessage = false
-      // this.connectToRoom()
+
+      this.unsubscribeList()
+
       this.joinTopicMessage()
     });
+  }
+
+  unsubscribeList(){
+    this.subTopicRoom?.unsubscribe()
+    this.subTopicRoomUser?.unsubscribe()
   }
 
   inputMessage?: string

@@ -58,7 +58,7 @@ export class MainContentPageComponent implements OnInit{
         if(response.body){
           this.loadingCompanyChatRoomList = false
           this.companyChatRoomList = response.body
-          console.log(this.companyChatRoomList)
+          // console.log(this.companyChatRoomList)
         }
         else{
           this.customErrorCompanyChatRoomList! = 'Brak obiektu odpowiedzi';

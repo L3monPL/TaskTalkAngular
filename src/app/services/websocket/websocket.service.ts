@@ -15,28 +15,32 @@ export class WebsocketService {
    }
 
   connect() {
-    const socket = new SockJS('//localhost:8080/ws');
+    if (!this.isConnectedWebSocket) {
+      const socket = new SockJS('//localhost:8080/ws');
 
-    // Inicjalizuj nowy klient STOMP
-    this.stompClient = Stomp.over(socket);
+      // Inicjalizuj nowy klient STOMP
+      this.stompClient = Stomp.over(socket);
 
-    // Zaktualizuj funkcję fabryczną Websocket w klienta STOMP, aby używała sockjs-client
-    this.stompClient.webSocketFactory = () => {
-      return new SockJS('//localhost:8080/ws');
-    };
+      // Zaktualizuj funkcję fabryczną Websocket w klienta STOMP, aby używała sockjs-client
+      this.stompClient.webSocketFactory = () => {
+        return new SockJS('//localhost:8080/ws');
+      };
 
-    // Opcjonalnie możesz zarejestrować funkcję wywołania zwrotnego na zdarzenie połączenia
-    this.stompClient.onConnect = (frame: any) => {
-      console.log('Connected to websocket');
-      this.isConnectedWebSocket = true
-    };
+      // Opcjonalnie możesz zarejestrować funkcję wywołania zwrotnego na zdarzenie połączenia
+      this.stompClient.onConnect = (frame: any) => {
+        console.log('Connected to websocket');
+        this.isConnectedWebSocket = true
+      };
 
-    // Opcjonalnie możesz zarejestrować funkcję wywołania zwrotnego na zdarzenie błędu
-    this.stompClient.onStompError = (frame: any) => {
-      console.error('STOMP protocol error: ', frame);
-    };
+      // Opcjonalnie możesz zarejestrować funkcję wywołania zwrotnego na zdarzenie błędu
+      this.stompClient.onStompError = (frame: any) => {
+        console.error('STOMP protocol error: ', frame);
+      };
 
-    // Połącz się z serwerem WebSocket
-    this.stompClient.activate();
+      // Połącz się z serwerem WebSocket
+      this.stompClient.activate(); 
+    } else {
+      console.log('Already connected to websocket');
+  }
   }
 }
