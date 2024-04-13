@@ -55,7 +55,7 @@
         }
     </div>
     <div class="inputs">
-        <input [(ngModel)]="this.inputMessage" (keyup.enter)="sendMessage()" type="text" placeholder="Wiadomość...">
-        <!-- <button (click)="this.sendMessage()">wyślij</button> -->
+        <!-- <input [(ngModel)]="this.inputMessage" (keyup.enter)="sendMessage()" type="text" placeholder="Wiadomość..."> -->
+        <textarea (input)="onInput($event)" #textArea name="" id="" cols="30" rows="10" placeholder="Wiadomość..."></textarea>
     </div>
 </div>

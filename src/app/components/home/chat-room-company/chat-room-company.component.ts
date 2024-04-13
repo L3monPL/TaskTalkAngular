@@ -39,6 +39,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   ) { }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @ViewChild('textArea') private textArea!: ElementRef;
 
   ngOnInit(): void {
     this.checkUrl()
@@ -304,6 +305,30 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         // console.log('Scroll top is less than 300');
       } 
     }
+  }
+
+  onInput(event: any) {
+    let area = event.target
+
+    const lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
+    const lines = area.value.split('\n').length;
+    let difBtwHeightAndLine = 8
+    
+    // Sprawdź, czy wysokość tekstarea zmieniła się o więcej niż jedną linię
+    if (area.scrollHeight + difBtwHeightAndLine >= area.clientHeight + lineHeight && lines <= 4) {
+      area.style.height = (area.clientHeight + lineHeight) + 'px'; // Rozszerz o jedną linię
+      const element = this.scrollContainer.nativeElement
+      element.style.height = this.scrollContainer.nativeElement.clientHeight - lineHeight + 'px'
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop + lineHeight
+    }
+
+
+
+    // console.log("area.scrollHeight: " + (area.scrollHeight + difBtwHeightAndLine))
+    // console.log("area.clientHeight + lineHeight: " + (area.clientHeight + lineHeight))
+
+    // console.log(this.scrollContainer.nativeElement.clientHeight)
+
   }
 
 }
