@@ -313,6 +313,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     const lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
     const lines = area.value.split('\n').length;
     let difBtwHeightAndLine = 8
+    // let areaLineHeight = lineHeight * lines + difBtwHeightAndLine
     
     // Sprawdź, czy wysokość tekstarea zmieniła się o więcej niż jedną linię
     if (area.scrollHeight + difBtwHeightAndLine >= area.clientHeight + lineHeight && lines <= 4) {
@@ -320,7 +321,42 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       const element = this.scrollContainer.nativeElement
       element.style.height = this.scrollContainer.nativeElement.clientHeight - lineHeight + 'px'
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop + lineHeight
+      // console.log('add')
     }
+    else if (lines == 1 && area.clientHeight == 60 || lines == 2 && area.clientHeight == 86 || lines == 3 && area.clientHeight == 112) {
+      area.style.height = (area.clientHeight - lineHeight) + 'px';
+      const element = this.scrollContainer.nativeElement
+      element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px'
+
+      ///////////////////
+      console.log(this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight)
+      console.log(this.scrollContainer.nativeElement.scrollHeight)
+      // console.log(this.scrollContainer.nativeElement.clientHeight)
+      
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight 
+        console.log('change scroll position')
+      }
+      ///////////////////
+    }
+
+    // if (area.scrollHeight + difBtwHeightAndLine <= area.clientHeight + lineHeight) {
+    //   console.log('minus')
+    //   console.log(lines)
+    // }
+    // console.log(lines)
+    // console.log(area.clientHeight)
+    // console.log(areaLineHeight)
+
+    // const minHeight = lineHeight * 4;
+    // // Sprawdź, czy wysokość text area powinna zostać zmniejszona
+    // if (area.scrollHeight < area.clientHeight && area.clientHeight > minHeight && lines >= 4) {
+    //   area.style.height = (area.clientHeight - lineHeight) + 'px'; // Zmniejsz o jedną linię
+    //   const element = this.scrollContainer.nativeElement;
+    //   element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px';
+    //   this.scrollContainer.nativeElement.scrollTop -= lineHeight;
+    //   console.log('remove');
+    // }
 
 
 
