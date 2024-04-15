@@ -56,6 +56,6 @@
     </div>
     <div class="inputs">
         <!-- <input [(ngModel)]="this.inputMessage" (keyup.enter)="sendMessage()" type="text" placeholder="Wiadomość..."> -->
-        <textarea (input)="onInput($event)" #textArea name="" id="" cols="30" rows="10" placeholder="Wiadomość..."></textarea>
+        <textarea [(ngModel)]="this.inputMessage" (keydown)="sendMessage($event)" (input)="onInput($event)" #textArea name="" id="" cols="30" rows="10" placeholder="Wiadomość..."></textarea>
     </div>
 </div>

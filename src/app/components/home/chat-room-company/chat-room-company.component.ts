@@ -172,16 +172,22 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/message`, {}, JSON.stringify(0))
   }
 
-  sendMessage(){
-    if (!this.inputMessage) {
+  sendMessage(event: any){
+    if (!this.inputMessage?.trim()) {
       return
     }
+    if (event.key === "Enter" && !event.shiftKey) {
+  
+      let messageResponse = {
+        message: this.inputMessage
+      }
+      this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/sendMessage`, {}, JSON.stringify(messageResponse))
+      this.inputMessage = ''
+      console.log("this.inputMessage: " + this.inputMessage)
 
-    let messageResponse = {
-      message: this.inputMessage
+      this.resetTextAreaStyle()
+      event.preventDefault();
     }
-    this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/sendMessage`, {}, JSON.stringify(messageResponse))
-    this.inputMessage = ''
   }
 
   page = 0
@@ -307,11 +313,17 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     }
   }
 
+  lastLinesCount: number = 0
+
   onInput(event: any) {
+    const inputText = (event.target as HTMLInputElement).value;
+    console.log('input func')
+
     let area = event.target
 
     const lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
     const lines = area.value.split('\n').length;
+    let diffByCurrentLines = this.lastLinesCount - lines
     let difBtwHeightAndLine = 8
     // let areaLineHeight = lineHeight * lines + difBtwHeightAndLine
     
@@ -339,32 +351,22 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       }
       ///////////////////
     }
+  }
 
-    // if (area.scrollHeight + difBtwHeightAndLine <= area.clientHeight + lineHeight) {
-    //   console.log('minus')
-    //   console.log(lines)
-    // }
-    // console.log(lines)
-    // console.log(area.clientHeight)
-    // console.log(areaLineHeight)
+  resetTextAreaStyle(){
+    let area = this.textArea.nativeElement
+    let lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
+    let lines = area.value.split('\n').length;
+    console.log(lines)
+    console.log(lineHeight)
 
-    // const minHeight = lineHeight * 4;
-    // // Sprawdź, czy wysokość text area powinna zostać zmniejszona
-    // if (area.scrollHeight < area.clientHeight && area.clientHeight > minHeight && lines >= 4) {
-    //   area.style.height = (area.clientHeight - lineHeight) + 'px'; // Zmniejsz o jedną linię
-    //   const element = this.scrollContainer.nativeElement;
-    //   element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px';
-    //   this.scrollContainer.nativeElement.scrollTop -= lineHeight;
-    //   console.log('remove');
-    // }
+    const element = this.scrollContainer.nativeElement
+    if (lines > 4) {
+      lines = 4
+    }
+    element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight * (lines - 1) + 'px'
 
-
-
-    // console.log("area.scrollHeight: " + (area.scrollHeight + difBtwHeightAndLine))
-    // console.log("area.clientHeight + lineHeight: " + (area.clientHeight + lineHeight))
-
-    // console.log(this.scrollContainer.nativeElement.clientHeight)
-
+    area.style.height = 34 + 'px';
   }
 
 }
