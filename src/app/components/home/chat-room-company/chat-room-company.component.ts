@@ -354,11 +354,29 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       console.log(this.scrollContainer.nativeElement.scrollHeight)
       
       if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
-        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight 
-        console.log('change scroll position')
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight
       }
       ///////////////////
 
+      this.lastLinesCount = lines
+    }
+    // ----------------------------------------------------
+
+    console.log(lines)
+    console.log(area.clientHeight)
+
+    if (lines < 3 && area.clientHeight == 112) {
+
+      area.style.height = (lineHeight * lines) + difBtwHeightAndLine + 'px';
+      const element = this.scrollContainer.nativeElement
+      element.style.height = this.scrollContainer.nativeElement.clientHeight + (lineHeight * (Math.abs(diffByCurrentLines!) - 1)) + 'px'
+
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
+        // this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - (lineHeight * Math.abs(diffByCurrentLines!))
+        console.log('change scroll position')
+      }
+
+      console.log('test 112')
       this.lastLinesCount = lines
     }
 
