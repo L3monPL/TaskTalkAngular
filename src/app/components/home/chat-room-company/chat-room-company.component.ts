@@ -419,4 +419,16 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     }
   }
 
+  filesList?: Array<any> = []
+
+  onFileSelected($event: any) {
+    const files = $event.target.files;
+
+    for (let index = 0; index < files.length; index++) {
+      this.filesList!.push(files[index])
+      
+    }
+    console.log(this.filesList)
+  }
+
 }

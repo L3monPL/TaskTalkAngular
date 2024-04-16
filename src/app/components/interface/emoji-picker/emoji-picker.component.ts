@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-emoji-picker',
@@ -7,9 +7,18 @@ import { Component, EventEmitter, Output } from '@angular/core';
   templateUrl: './emoji-picker.component.html',
   styleUrl: './emoji-picker.component.scss'
 })
-export class EmojiPickerComponent {
+export class EmojiPickerComponent implements AfterViewInit{
 
   @Output() selectEmitter = new EventEmitter<string>();
+  @Output() closeComponent = new EventEmitter<any>();
+
+  isOpenConponent = false
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.isOpenConponent = true
+    })
+  }
 
   emojiList = [
     {
@@ -95,5 +104,16 @@ export class EmojiPickerComponent {
 
   emojiSelect(emoji: string){
     this.selectEmitter.emit(emoji)
+  }
+
+  @ViewChild('container') private container!: ElementRef
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    
+    if (!this.container.nativeElement.contains(event.target) && this.isOpenConponent) {
+      this.closeComponent.emit()
+      // console.log('outside')
+    }
   }
 }

@@ -57,7 +57,13 @@
         </div>
         @if (this.openEmojiPanel) {
             <div class="emoji_picker_container">
-                <app-emoji-picker (selectEmitter)="addEmojiToChat($event)"></app-emoji-picker>
+                <app-emoji-picker (selectEmitter)="addEmojiToChat($event)" (closeComponent)="this.openEmojiPanel = false"></app-emoji-picker>
+            </div>
+        }@if (this.filesList?.length) {
+            <div class="file_list_container">
+                @for (item of this.filesList; track $index) {
+                    {{item.name}}
+                }
             </div>
         }
     </div>
@@ -67,6 +73,13 @@
             <div (click)="this.openEmojiPanel = !this.openEmojiPanel" class="icon_input_item">
                 <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="20" height="20"><path d="M12,24A12,12,0,1,1,24,12,12.013,12.013,0,0,1,12,24ZM12,2A10,10,0,1,0,22,12,10.011,10.011,0,0,0,12,2Zm5,14a1,1,0,0,0-1-1H8a1,1,0,0,0,0,2h8A1,1,0,0,0,17,16ZM6,10c0,1,.895,1,2,1s2,0,2-1a2,2,0,0,0-4,0Zm8,0c0,1,.895,1,2,1s2,0,2-1a2,2,0,0,0-4,0Z"/></svg>
             </div>
+            <label for="file-input" (click)="true" class="icon_input_item">
+                <!-- <label for="file-input"> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="19" height="19"><path d="M22.95,9.6a1,1,0,0,0-1.414,0L10.644,20.539a5,5,0,1,1-7.072-7.071L14.121,2.876a3,3,0,0,1,4.243,4.242L7.815,17.71a1.022,1.022,0,0,1-1.414,0,1,1,0,0,1,0-1.414l9.392-9.435a1,1,0,0,0-1.414-1.414L4.987,14.882a3,3,0,0,0,0,4.243,3.073,3.073,0,0,0,4.243,0L19.778,8.532a5,5,0,0,0-7.071-7.07L2.158,12.054a7,7,0,0,0,9.9,9.9L22.95,11.018A1,1,0,0,0,22.95,9.6Z"/></svg>
+                <!-- </label> -->
+                <input type="file" id="file-input" multiple hidden (change)="onFileSelected($event)">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="19" height="19"><path d="M22.95,9.6a1,1,0,0,0-1.414,0L10.644,20.539a5,5,0,1,1-7.072-7.071L14.121,2.876a3,3,0,0,1,4.243,4.242L7.815,17.71a1.022,1.022,0,0,1-1.414,0,1,1,0,0,1,0-1.414l9.392-9.435a1,1,0,0,0-1.414-1.414L4.987,14.882a3,3,0,0,0,0,4.243,3.073,3.073,0,0,0,4.243,0L19.778,8.532a5,5,0,0,0-7.071-7.07L2.158,12.054a7,7,0,0,0,9.9,9.9L22.95,11.018A1,1,0,0,0,22.95,9.6Z"/></svg> -->
+            </label>
         </div>
     </div>
 </div>

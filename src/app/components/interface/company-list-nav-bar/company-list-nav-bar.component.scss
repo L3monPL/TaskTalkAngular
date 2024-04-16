@@ -32,7 +32,7 @@ section{
         background-color: var(--dark);
         border-radius: 6px;
         padding: 0.5rem;
-        left: 62px;
+        left: 60px;
         width: 208px;
         top: 0px;
         z-index: 999;
@@ -100,11 +100,11 @@ section{
     // }
     .item_company{
         background-color: #FFF;
-        height: 46px;
-        width: 46px;
-        font-size: 1rem;
+        height: 42px;
+        width: 42px;
+        font-size: 0.8rem;
         font-weight: 600;
-        border-radius: 8px;
+        border-radius: 14px;
         color: #000;
         cursor: pointer;
         transition: 0.3s;
@@ -116,16 +116,16 @@ section{
     }
     .item_company:hover{
         transform: scale(1.08);
-        border-radius: 10px;
+        border-radius: 12px;
         transition: 0.3s;
     }
     .item_company_add{
         border: 1px solid #fff;
         background-color: transparent;
-        height: 46px;
-        width: 46px;
+        height: 42px;
+        width: 42px;
         font-size: 0.7rem;
-        border-radius: 8px;
+        border-radius: 14px;
         color: #000;
         cursor: pointer;
 
