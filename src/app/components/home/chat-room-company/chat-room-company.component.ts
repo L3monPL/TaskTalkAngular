@@ -316,9 +316,6 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   lastLinesCount: number = 1
 
   onInput(event: any) {
-    const inputText = (event.target as HTMLInputElement).value;
-    console.log('lastLinesCount: ' + this.lastLinesCount)
-
     let area = event.target
 
     const lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
@@ -331,79 +328,64 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     if (lines > 4) {
       diffByCurrentLines = this.lastLinesCount - 4
     }
-    console.log('diffByCurrentLines: ' + Math.abs(diffByCurrentLines!))
+    // console.log('diffByCurrentLines: ' + Math.abs(diffByCurrentLines!))
     let difBtwHeightAndLine = 8
     
+    // --------------------------------------------------------------------------------- //
     // Sprawdź, czy wysokość tekstarea zmieniła się
     if (area.scrollHeight + difBtwHeightAndLine >= area.clientHeight + lineHeight && this.lastLinesCount <= 4) {
       area.style.height = (area.clientHeight + (lineHeight * Math.abs(diffByCurrentLines!))) + 'px'; // Rozszerz o jedną linię
-      console.log("area.style.height: " + area.style.height)
+      // console.log("area.style.height: " + area.style.height)
       const element = this.scrollContainer.nativeElement
       element.style.height = this.scrollContainer.nativeElement.clientHeight - (lineHeight * Math.abs(diffByCurrentLines!)) + 'px'
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop + (lineHeight * Math.abs(diffByCurrentLines!))
 
       this.lastLinesCount = lines
     }
+    // --------------------------------------------------------------------------------- //
     else if (lines == 1 && area.clientHeight == 60 || lines == 2 && area.clientHeight == 86 || lines == 3 && area.clientHeight == 112) {
       area.style.height = (area.clientHeight - lineHeight) + 'px';
       const element = this.scrollContainer.nativeElement
       element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px'
-
-      ///////////////////
-      console.log(this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight)
-      console.log(this.scrollContainer.nativeElement.scrollHeight)
       
       if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
         this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight
       }
-      ///////////////////
-
+      // console.log('lines == 1 && area.clientHeight == 60 || lines == 2 && area.clientHeight == 86 || lines == 3 && area.clientHeight == 112')
       this.lastLinesCount = lines
     }
-    // ----------------------------------------------------
-
-    console.log(lines)
-    console.log(area.clientHeight)
-
-    if (lines < 3 && area.clientHeight == 112) {
+    // --------------------------------------------------------------------------------- //
+    // console.log(lines)
+    // console.log(area.clientHeight)
+    // --------------------------------------------------------------------------------- //
+    if ((lines == 2 && area.clientHeight == 112) || (lines <= 2 && area.clientHeight == 86)) {
 
       area.style.height = (lineHeight * lines) + difBtwHeightAndLine + 'px';
       const element = this.scrollContainer.nativeElement
-      element.style.height = this.scrollContainer.nativeElement.clientHeight + (lineHeight * (Math.abs(diffByCurrentLines!) - 1)) + 'px'
+      element.style.height = this.scrollContainer.nativeElement.clientHeight + (lineHeight * 2) + 'px'
 
       if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
-        // this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - (lineHeight * Math.abs(diffByCurrentLines!))
-        console.log('change scroll position')
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight * 2
+        // console.log('change scroll position')
       }
-
-      console.log('test 112')
+      // console.log('lines == 2 && area.clientHeight == 112')
       this.lastLinesCount = lines
     }
+    // --------------------------------------------------------------------------------- //
+    if (lines == 1 && area.clientHeight == 112) {
 
-    // if (area.scrollHeight + difBtwHeightAndLine >= area.clientHeight + lineHeight && lines <= 4) {
-    //   area.style.height = (area.clientHeight + (lineHeight * Math.abs(Math.abs(diffByCurrentLines) - 1))) + 'px'; // Rozszerz o jedną linię
-    //   const element = this.scrollContainer.nativeElement
-    //   element.style.height = this.scrollContainer.nativeElement.clientHeight - lineHeight + 'px'
-    //   this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop + lineHeight
-    //   // console.log('add')
-    //   this.lastLinesCount = lines + 1
-    // }
-    // else if (lines == 1 && area.clientHeight == 60 || lines == 2 && area.clientHeight == 86 || lines == 3 && area.clientHeight == 112) {
-    //   area.style.height = (area.clientHeight - lineHeight) + 'px';
-    //   const element = this.scrollContainer.nativeElement
-    //   element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px'
+      area.style.height = (lineHeight * lines) + difBtwHeightAndLine + 'px';
+      const element = this.scrollContainer.nativeElement
+      element.style.height = this.scrollContainer.nativeElement.clientHeight + (lineHeight * 3) + 'px'
 
-    //   ///////////////////
-    //   console.log(this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight)
-    //   console.log(this.scrollContainer.nativeElement.scrollHeight)
-    //   // console.log(this.scrollContainer.nativeElement.clientHeight)
-      
-    //   if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
-    //     this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight 
-    //     console.log('change scroll position')
-    //   }
-    //   ///////////////////
-    // }
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight * 3
+        // console.log('change scroll position')
+      }
+      // console.log('lines == 1 && area.clientHeight == 112')
+      this.lastLinesCount = lines
+    }
+    // --------------------------------------------------------------------------------- //
   }
 
   resetTextAreaStyle(){
