@@ -1,0 +1,18 @@
+<section>
+    <div class="emoji_scroll_container">
+        @for (label of emojiList; track label.section) {
+            @switch (label.section) {
+                @case (1) {
+                    <p>{{label.name}}</p>
+                    <div class="emoji_section_container">
+                        @for (item of label.list; track item.id) {
+                            <div (click)="emojiSelect(item.emoji)" class="emoji_item">
+                                {{item.emoji}}
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    </div>
+</section>

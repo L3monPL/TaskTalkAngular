@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompanyManagementService } from '../../../services/global/company-management.service';
 import { UserDataService } from '../../../services/global/user-data.service';
+import { EmojiPickerComponent } from '../../interface/emoji-picker/emoji-picker.component';
 
 export interface ChatRoomMessage{
   id: number
@@ -24,7 +25,8 @@ export interface ChatRoomMessage{
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    EmojiPickerComponent
   ],
   templateUrl: './chat-room-company.component.html',
   styleUrl: './chat-room-company.component.scss'
@@ -304,7 +306,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       // Sprawdź wartość scrollTop dla tego elementu
       let scrollTop = element.scrollTop;
 
-      // Jeśli scrollTop jest mniejszy niż 200, wykonaj jakąś akcję
+      // Jeśli scrollTop jest mniejszy niż 30, wykonaj jakąś akcję
       if (scrollTop < 30) {
         // Tutaj możesz wykonać jakieś działanie
         this.loadMoreMessages()
@@ -403,6 +405,18 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
     area.style.height = 34 + 'px';
     this.lastLinesCount = 1
+  }
+
+  openEmojiPanel: boolean = false
+
+  addEmojiToChat(emoji: string){
+    console.log(emoji)
+    if (!this.inputMessage) {
+      this.inputMessage = emoji
+    }
+    else{
+      this.inputMessage = this.inputMessage + emoji
+    }
   }
 
 }

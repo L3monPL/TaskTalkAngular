@@ -37,6 +37,15 @@
             }
         }
     }
+    .chat_content_container{
+        position: relative;
+
+        .emoji_picker_container{
+            position: absolute;
+            right: 1.5rem;
+            bottom: -4px;
+        }
+    }
     .messages_container{
         padding-top: 0.5rem;
         margin: 0rem 0.5rem;
@@ -97,9 +106,7 @@
     ///////INPUT DOWN CONTAINER //////////////////////
     .inputs{
         flex: 1;
-        // border-radius: 4px;
-        // background-color: var(--dark);
-        // padding: 0.6rem;
+        position: relative;
 
         display: flex;
         flex-direction: row;
@@ -133,5 +140,29 @@
             line-height: 26px;
             font-size: 1rem;
         }
+        .action_icons_container{
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            bottom: 0px;
+            margin-right: 0.5rem;
+            // background-color: aqua;
+            display: flex;
+            align-items: center;
+            user-select: none;
+
+            .icon_input_item{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2px 4px;
+                cursor: pointer;
+
+                svg{
+                    fill: var(--font-gray);
+                }
+            }
+        }
     }
+
 }
