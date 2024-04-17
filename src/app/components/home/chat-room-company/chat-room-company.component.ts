@@ -321,8 +321,39 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     let area = event.target
 
     const lineHeight = parseInt(window.getComputedStyle(area).lineHeight);
-    const lines = area.value.split('\n').length;
+    // const lines = area.value.split('\n').length;
     let diffByCurrentLines
+
+    var lineNo = this.textArea.nativeElement.scrollHeight;
+    var lineNo2 = this.textArea.nativeElement.clientHeight;
+    var lines = ((this.textArea.nativeElement.scrollHeight) / 24);
+
+    
+
+    // area.value.substr(0, area.selectionStart).split(/\r?\n|\r/).length;
+    // console.log("lineHeight" + lineHeight)
+    console.log(lines)
+
+
+    // const linesXD = area.value.split("/^/gm").length;
+    // console.log(linesXD)
+    if (!this.inputMessage) {
+      area.style.height = (lineHeight * 1) + 'px';
+      const element = this.scrollContainer.nativeElement
+      element.style.height = this.scrollContainer.nativeElement.clientHeight + (lineHeight * (lines - 1)) + 'px'
+
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - lineHeight * 3
+        // console.log('change scroll position')
+      }
+      // console.log('lines == 1 && area.clientHeight == 112')
+      this.lastLinesCount = 1
+    }
+
+
+
+
+
 
     if (lines <= 4) {
       diffByCurrentLines = this.lastLinesCount - lines
@@ -331,7 +362,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       diffByCurrentLines = this.lastLinesCount - 4
     }
     // console.log('diffByCurrentLines: ' + Math.abs(diffByCurrentLines!))
-    let difBtwHeightAndLine = 8
+    let difBtwHeightAndLine = 0
     
     // --------------------------------------------------------------------------------- //
     // Sprawdź, czy wysokość tekstarea zmieniła się
@@ -345,7 +376,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       this.lastLinesCount = lines
     }
     // --------------------------------------------------------------------------------- //
-    else if (lines == 1 && area.clientHeight == 60 || lines == 2 && area.clientHeight == 86 || lines == 3 && area.clientHeight == 112) {
+    else if (lines == 1 && area.clientHeight == 48 || lines == 2 && area.clientHeight == 72 || lines == 3 && area.clientHeight == 96) {
       area.style.height = (area.clientHeight - lineHeight) + 'px';
       const element = this.scrollContainer.nativeElement
       element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight + 'px'
@@ -360,7 +391,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     // console.log(lines)
     // console.log(area.clientHeight)
     // --------------------------------------------------------------------------------- //
-    if ((lines == 2 && area.clientHeight == 112) || (lines <= 2 && area.clientHeight == 86)) {
+    if ((lines == 2 && area.clientHeight == 96) || (lines <= 2 && area.clientHeight == 72)) {
 
       area.style.height = (lineHeight * lines) + difBtwHeightAndLine + 'px';
       const element = this.scrollContainer.nativeElement
@@ -374,7 +405,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       this.lastLinesCount = lines
     }
     // --------------------------------------------------------------------------------- //
-    if (lines == 1 && area.clientHeight == 112) {
+    if (lines == 1 && area.clientHeight == 96) {
 
       area.style.height = (lineHeight * lines) + difBtwHeightAndLine + 'px';
       const element = this.scrollContainer.nativeElement
@@ -403,7 +434,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     }
     element.style.height = this.scrollContainer.nativeElement.clientHeight + lineHeight * (lines - 1) + 'px'
 
-    area.style.height = 34 + 'px';
+    area.style.height = 24 + 'px';
     this.lastLinesCount = 1
   }
 
