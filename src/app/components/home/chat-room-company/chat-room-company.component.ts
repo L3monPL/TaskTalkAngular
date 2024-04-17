@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CompanyManagementService } from '../../../services/global/company-management.service';
 import { UserDataService } from '../../../services/global/user-data.service';
 import { EmojiPickerComponent } from '../../interface/emoji-picker/emoji-picker.component';
+import { FileListChatComponent } from '../../interface/file-list-chat/file-list-chat.component';
 
 export interface ChatRoomMessage{
   id: number
@@ -26,7 +27,8 @@ export interface ChatRoomMessage{
   imports: [
     CommonModule,
     FormsModule,
-    EmojiPickerComponent
+    EmojiPickerComponent,
+    FileListChatComponent
   ],
   templateUrl: './chat-room-company.component.html',
   styleUrl: './chat-room-company.component.scss'
@@ -451,13 +453,33 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   }
 
   filesList?: Array<any> = []
+  isOpenFilePanel = false
 
   onFileSelected($event: any) {
     const files = $event.target.files;
 
     for (let index = 0; index < files.length; index++) {
-      this.filesList!.push(files[index])
-      
+      if (files[index].type.startsWith('image/')) {
+        const reader: FileReader = new FileReader();
+        reader.onload = () => {
+          
+          let imageFileObject = {
+            image: reader.result,
+            file: files[index]
+          }
+          this.filesList!.push(imageFileObject)
+        }
+        // };
+        reader.readAsDataURL(files[index]);
+      } else if (!files[index].type.startsWith('image/')) {
+        this.filesList!.push(files[index]) 
+      }
+
+      if (!this.isOpenFilePanel) {
+        this.isOpenFilePanel = true
+        this.scrollContainer.nativeElement.style.height = this.scrollContainer.nativeElement.clientHeight - 78 + 'px'
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop + 78    
+      }
     }
     console.log(this.filesList)
   }

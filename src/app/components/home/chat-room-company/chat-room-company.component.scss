@@ -1,11 +1,16 @@
 :host{
     flex: 1;
+    overflow: hidden;
+    height: 100dvh;
+    max-width: calc(100dvw - 200px - 220px - 66px);
+    max-height: 100dvh;
 }
 .chat_container{
     // padding: 1rem;
-    overflow: hidden;
-    height: 100dvh;
-    max-height: 100dvh;
+    // overflow: hidden;
+    // height: 100dvh;
+    // max-width: calc(100dvw - 200px - 220px - 66px);
+    // max-height: 100dvh;
 
     .chat_top_header_container{
         background-color: var(--primary-3);
@@ -131,6 +136,27 @@
             margin: 0.5rem 0rem;
             display: flex;
             justify-content: center;
+            position: relative;
+
+            // .mask_scroll_right{
+            //     position: absolute;
+            //     top: 0px;
+            //     bottom: 0px;
+            //     right: 0px;
+            //     width: 8px;
+            //     background: var(--primary-3);
+            // }
+        }
+        .textarea_container ::-webkit-scrollbar-track {
+            background: var(--dark);
+            border: 0px none var(--dark);
+            // border-bottom-right-radius: 6px;
+        }
+        .textarea_container ::-webkit-scrollbar-thumb {
+            background: #393c42; //#393c42
+            border: 0px none #ccc;
+            border-radius: 50px;
+            cursor: pointer!important;
         }
         textarea{
             margin: 0.25rem 0rem;
@@ -152,10 +178,10 @@
         }
         .action_icons_container{
             position: absolute;
-            right: 0px;
+            right: 8px;
             top: 0px;
             bottom: 0px;
-            padding-right: 0.75rem;
+            // padding-right: 0.75rem;
             // background-color: aqua;
             display: flex;
             align-items: center;
@@ -180,6 +206,13 @@
             }
             .icon_input_item:hover{
                 background-color: var(--gray-hover);
+            }
+            .send_message_svg{
+                // background-color: var(--primary-3);
+                // padding: px 10px;
+                svg{
+                    fill: var(--blue);
+                }
             }
         }
     }
