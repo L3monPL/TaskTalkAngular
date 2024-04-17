@@ -61,7 +61,7 @@
             </div>
         }@if (this.isOpenFilePanel) {
             <div class="file_list_container">
-                <app-file-list-chat [fileList]="this.filesList"></app-file-list-chat>
+                <app-file-list-chat [fileList]="this.filesList" (closeFileList)="closeFileListPanel()"></app-file-list-chat>
             </div>
         }
     </div>

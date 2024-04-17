@@ -484,4 +484,12 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     console.log(this.filesList)
   }
 
+  closeFileListPanel(){
+    this.isOpenFilePanel = false
+    this.scrollContainer.nativeElement.style.height = this.scrollContainer.nativeElement.clientHeight + 78 + 'px'
+    if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - 78
+    }
+  }
+
 }
