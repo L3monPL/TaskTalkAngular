@@ -129,6 +129,8 @@
             background-color: var(--dark);
             border-radius: 4px;
             margin: 0.5rem 0rem;
+            display: flex;
+            justify-content: center;
         }
         textarea{
             margin: 0.25rem 0rem;
