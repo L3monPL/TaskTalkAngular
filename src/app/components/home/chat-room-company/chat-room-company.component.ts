@@ -8,6 +8,7 @@ import { CompanyManagementService } from '../../../services/global/company-manag
 import { UserDataService } from '../../../services/global/user-data.service';
 import { EmojiPickerComponent } from '../../interface/emoji-picker/emoji-picker.component';
 import { FileListChatComponent } from '../../interface/file-list-chat/file-list-chat.component';
+import { FileService } from '../../../services/rest/file.service';
 
 export interface ChatRoomMessage{
   id: number
@@ -39,7 +40,8 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     public websocketService: WebsocketService,
     private route: ActivatedRoute,
     private companyManagementService: CompanyManagementService,
-    public userDataService: UserDataService
+    public userDataService: UserDataService,
+    private fileService: FileService
   ) { }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -182,6 +184,12 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     }
     if (event.key === "Enter" && !event.shiftKey) {
   
+      if (this.filesList?.length) {
+        this.postMessageWithFileUpload()
+        event.preventDefault();
+        return
+      }
+
       let messageResponse = {
         message: this.inputMessage
       }
@@ -472,7 +480,13 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         // };
         reader.readAsDataURL(files[index]);
       } else if (!files[index].type.startsWith('image/')) {
-        this.filesList!.push(files[index]) 
+
+        let fileObject = {
+          image: null,
+          file: files[index]
+        }
+
+        this.filesList!.push(fileObject) 
       }
 
       if (!this.isOpenFilePanel) {
@@ -489,6 +503,35 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     this.scrollContainer.nativeElement.style.height = this.scrollContainer.nativeElement.clientHeight + 78 + 'px'
     if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight != this.scrollContainer.nativeElement.scrollHeight) {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollTop - 78
+    }
+  }
+
+  loadingPostMessageWithFile = false
+  subUploadFile?: Subscription
+  customErrorUploadFile?: string
+
+  postMessageWithFileUpload(){
+    if (!this.loadingPostMessageWithFile) {
+      console.log(this.filesList![0].file)
+      this.subUploadFile = this.fileService.postMessageWithFile(this.idParam!, this.filesList![0].file, this.inputMessage!).subscribe({
+        next: (response) => {
+          if(response){
+            this.inputMessage = ''
+            this.resetTextAreaStyle()
+            this.closeFileListPanel()
+          }
+          else{
+            this.customErrorUploadFile! = 'Brak obiektu odpowiedzi';
+          }
+        },
+        error: (errorResponse) => {
+          this.loadingPostMessageWithFile = false
+          this.customErrorUploadFile = errorResponse.error
+        },
+        complete: () => {
+          this.loadingPostMessageWithFile = false;
+        }
+      })
     }
   }
 
