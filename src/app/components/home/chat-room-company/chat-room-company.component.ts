@@ -21,9 +21,9 @@ export interface ChatRoomMessage{
   edited: boolean
   createdAt: string
   file?: {
-    name: string
+    filename: string
     type: string
-    imageUrl: string|null
+    data: string|null
   }
 }
 
@@ -131,6 +131,16 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         let messageArray = this.messages
 
         messageContent.forEach((element: ChatRoomMessage) => {
+
+          let file = null
+          if (element.file) {
+            file = {
+              filename: element.file?.filename,
+              type: element.file?.type,
+              data: 'data:' + element.file?.type! + ';base64,' + element.file?.data!
+            }
+          }
+
           let mappingMessage = {
             id: element.id,
             roomId: element.roomId,
@@ -138,6 +148,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
             username: this.companyManagementService.companyUserList?.find(user => user.id == element.userId)?.username!,
             message: element.message,
             fileId: element.fileId,
+            file: file,
             replyToId: element.replyToId,
             edited: element.edited,
             createdAt: element.createdAt
@@ -145,9 +156,9 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
           }
           pullMessageArray.push(mappingMessage)
 
-          if (mappingMessage.fileId) {
-            this.getImage(mappingMessage) 
-          }
+          // if (mappingMessage.fileId) {
+          //   this.getImage(mappingMessage) 
+          // }
         });
 
         //sprawdzam duplikaty - to edit
@@ -561,7 +572,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
             name: response.body?.filename!,
             type: response.body?.type!
           }
-          message.file! = object
+          // message.file! = object to edit
           console.log(message)
         }
         else{

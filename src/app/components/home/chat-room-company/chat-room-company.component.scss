@@ -109,6 +109,10 @@
             display: flex;
             flex-direction: column;
             align-items: end;
+
+            img{
+                max-width: 60%;
+            }
         }
     }
 
