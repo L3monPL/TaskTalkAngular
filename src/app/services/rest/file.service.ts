@@ -2,6 +2,15 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface FileResponse{
+  id: number
+  filename: string
+  data: string
+  size: number
+  type: string
+  createdAt: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +25,15 @@ export class FileService {
   //------------------------------------------------------------------------//
   // GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET GET//
   //------------------------------------------------------------------------//
+
+  getFile(
+    fileId: number
+  ): Observable<HttpResponse<FileResponse>> {
+    return this.http.get<FileResponse>(this.PATH + `/${fileId}`, {
+      observe: 'response',
+      responseType: 'json'
+    })
+  }
 
   //------------------------------------------------------------------------//
 

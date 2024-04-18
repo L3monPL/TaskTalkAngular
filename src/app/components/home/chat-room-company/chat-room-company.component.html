@@ -31,6 +31,10 @@
                             }
                             <div class="message_container">
                                 {{item.message}}
+                                <!-- {{item.file?.imageUrl}} -->
+                                @if (item.file) {
+                                    <img [src]="item.file.imageUrl" alt="">
+                                }
                             </div>
                         </div>
         

@@ -20,6 +20,11 @@ export interface ChatRoomMessage{
   replyToId: number|null
   edited: boolean
   createdAt: string
+  file?: {
+    name: string
+    type: string
+    imageUrl: string|null
+  }
 }
 
 @Component({
@@ -105,6 +110,11 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
         }
         this.messages!.push(mappingMessage)
+
+        // if (mappingMessage.fileId) {
+        //   this.getImage(mappingMessage) 
+        // }
+
         if (this.userDataService.getId() == messageContent.userId) {
           setTimeout(() => {
             this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight
@@ -134,6 +144,10 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   
           }
           pullMessageArray.push(mappingMessage)
+
+          if (mappingMessage.fileId) {
+            this.getImage(mappingMessage) 
+          }
         });
 
         //sprawdzam duplikaty - to edit
@@ -533,6 +547,35 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         }
       })
     }
+  }
+
+  subGetFile?: Subscription
+
+  getImage(message: ChatRoomMessage){
+    // console.log('pobieram plik dla: ' + message)
+    this.subGetFile = this.fileService.getFile(message.fileId!).subscribe({
+      next: (response) => {
+        if(response.body){
+          let object = {
+            imageUrl: 'data:' + response.body?.type + ';base64,' + response.body?.data,
+            name: response.body?.filename!,
+            type: response.body?.type!
+          }
+          message.file! = object
+          console.log(message)
+        }
+        else{
+          // this.customErrorUploadFile! = 'Brak obiektu odpowiedzi';
+        }
+      },
+      error: (errorResponse) => {
+        this.loadingPostMessageWithFile = false
+        // this.customErrorUploadFile = errorResponse.error
+      },
+      complete: () => {
+        this.loadingPostMessageWithFile = false;
+      }
+    })
   }
 
 }
