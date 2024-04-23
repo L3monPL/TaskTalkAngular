@@ -30,10 +30,9 @@
                                 }
                             }
                             <div class="message_container">
-                                {{item.message}}
-                                <!-- {{item.file?.imageUrl}} -->
+                                <!-- {{item.message}} -->
                                 @if (item.file?.data) {
-                                    <img [src]="item.file!.data" alt="">
+                                    <img loading="lazy" [src]="item.file!.data" alt="">
                                 }
                                 @else if (item.file?.imageWidth && item.file?.imageHeight) {
                                     <div
@@ -42,9 +41,8 @@
                                     class="image_data_placeholder" #elementRef>
 
                                     </div>
-                                    <!-- <img [width]="item.file?.imageWidth" [height]="item.file?.imageHeight"
-                                     src="../../../../assets/images/picture_3917317.svg" alt=""> -->
                                 }
+                                {{item.message}}
                             </div>
                         </div>
         

@@ -212,14 +212,21 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   }
 
   sendMessage(event: any){
-    if (!this.inputMessage?.trim()) {
-      return
-    }
+    console.log('test send message')
+    // if (!this.inputMessage?.trim()) {
+    //   return
+    // }
     if (event.key === "Enter" && !event.shiftKey) {
   
       if (this.filesList?.length) {
         this.postMessageWithFileUpload()
         event.preventDefault();
+        return
+      }
+      if (!this.filesList?.length && !this.inputMessage?.trim()) {
+        console.log(this.filesList?.length)
+        this.resetTextAreaStyle()
+        // event.preventDefault();
         return
       }
 
@@ -596,9 +603,8 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   }
 
   getHeidhtImagePlaceholder(height: number, weight: number, elementRef: HTMLDivElement){
-    console.log(height, weight)
-    console.log(elementRef.offsetWidth)
-    return (elementRef.offsetWidth * height) / weight
+    console.log(((elementRef.offsetWidth * height) / weight).toFixed(1))
+    return ((elementRef.offsetWidth * height) / weight).toFixed(1)
   }
 
 }
