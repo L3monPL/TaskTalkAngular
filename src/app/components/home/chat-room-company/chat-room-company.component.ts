@@ -90,7 +90,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
   inputMessage?: string
   isDuplicateMessage = false
-  messages: Array<ChatRoomMessage> = []
+  messages: Array<ChatRoomMessage|any> = []
 
   subTopicRoom?: Subscription
   subTopicRoomUser?: Subscription
@@ -101,6 +101,18 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       this.subTopicRoom = this.websocketService.stompClient.subscribe(`/topic/room/${this.idParam}`, (messages: any) => {
         const messageContent: ChatRoomMessage = JSON.parse(messages.body)
         console.log(messageContent)
+
+        let file = null
+          if (messageContent.imageWidth && messageContent.imageHeight) {
+            file = {
+              filename: messageContent.file?.filename,
+              type: messageContent.file?.type,
+              data: null, //'data:' + element.file?.type! + ';base64,' + element.file?.data!
+              imageWidth: messageContent.imageWidth,
+              imageHeight: messageContent.imageHeight
+            }
+          }
+
         let mappingMessage = {
           id: messageContent.id,
           roomId: messageContent.roomId,
@@ -108,6 +120,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
           username: this.companyManagementService.companyUserList?.find(user => user.id == messageContent.userId)?.username!,
           message: messageContent.message,
           fileId: messageContent.fileId,
+          file: file,
           replyToId: messageContent.replyToId,
           edited: messageContent.edited,
           createdAt: messageContent.createdAt
@@ -115,9 +128,11 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         }
         this.messages!.push(mappingMessage)
 
-        // if (mappingMessage.fileId) {
-        //   this.getImage(mappingMessage) 
-        // }
+        console.log(mappingMessage)
+
+        if (mappingMessage.fileId) {
+          this.getImage(mappingMessage.fileId, mappingMessage.file) 
+        }
 
         if (this.userDataService.getId() == messageContent.userId) {
           setTimeout(() => {
