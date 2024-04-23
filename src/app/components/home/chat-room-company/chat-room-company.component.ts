@@ -23,8 +23,12 @@ export interface ChatRoomMessage{
   file?: {
     filename: string
     type: string
-    data: string|null
-  }
+    data: string|null,
+    imageWidth?: number
+    imageHeight?: number
+  },
+  imageWidth?: number
+  imageHeight?: number
 }
 
 @Component({
@@ -131,13 +135,16 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         let messageArray = this.messages
 
         messageContent.forEach((element: ChatRoomMessage) => {
+          // console.log(element)
 
           let file = null
-          if (element.file) {
+          if (element.imageWidth && element.imageHeight) {
             file = {
               filename: element.file?.filename,
               type: element.file?.type,
-              data: 'data:' + element.file?.type! + ';base64,' + element.file?.data!
+              data: null, //'data:' + element.file?.type! + ';base64,' + element.file?.data!
+              imageWidth: element.imageWidth,
+              imageHeight: element.imageHeight
             }
           }
 
@@ -154,11 +161,12 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
             createdAt: element.createdAt
   
           }
+          // console.log(mappingMessage)
           pullMessageArray.push(mappingMessage)
 
-          // if (mappingMessage.fileId) {
-          //   this.getImage(mappingMessage) 
-          // }
+          if (mappingMessage.fileId) {
+            this.getImage(mappingMessage.fileId, mappingMessage.file) 
+          }
         });
 
         //sprawdzam duplikaty - to edit
@@ -562,18 +570,16 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
   subGetFile?: Subscription
 
-  getImage(message: ChatRoomMessage){
+  getImage(fileId: number, file: any){
     // console.log('pobieram plik dla: ' + message)
-    this.subGetFile = this.fileService.getFile(message.fileId!).subscribe({
+    this.subGetFile = this.fileService.getFile(fileId!).subscribe({
       next: (response) => {
         if(response.body){
-          let object = {
-            imageUrl: 'data:' + response.body?.type + ';base64,' + response.body?.data,
-            name: response.body?.filename!,
-            type: response.body?.type!
-          }
-          // message.file! = object to edit
-          console.log(message)
+
+          file.data = 'data:' + response.body?.type + ';base64,' + response.body?.data,
+          file.filename = response.body?.filename!,
+          file.type = response.body?.type!
+
         }
         else{
           // this.customErrorUploadFile! = 'Brak obiektu odpowiedzi';
@@ -587,6 +593,12 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         this.loadingPostMessageWithFile = false;
       }
     })
+  }
+
+  getHeidhtImagePlaceholder(height: number, weight: number, elementRef: HTMLDivElement){
+    console.log(height, weight)
+    console.log(elementRef.offsetWidth)
+    return (elementRef.offsetWidth * height) / weight
   }
 
 }
