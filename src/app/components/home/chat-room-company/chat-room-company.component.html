@@ -41,6 +41,11 @@
                                     }
                                     </div>
                                 }
+                                @if (!item.file?.imageWidth && !item.file?.imageHeight && item.fileId) {
+                                    <div class="file_view_container">
+                                        {{item.file.filename}}
+                                    </div>
+                                }
                                 <!-- @if (item.file?.data) {
                                     <img loading="lazy" [src]="item.file!.data" alt="">
                                 } -->
