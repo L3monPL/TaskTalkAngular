@@ -603,8 +603,8 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   }
 
   getHeidhtImagePlaceholder(height: number, weight: number, elementRef: HTMLDivElement){
-    console.log(((elementRef.offsetWidth * height) / weight).toFixed(1))
-    return ((elementRef.offsetWidth * height) / weight).toFixed(1)
+    // console.log(((elementRef.offsetWidth * height) / weight))
+    return ((elementRef.offsetWidth * height) / weight)
   }
 
 }
