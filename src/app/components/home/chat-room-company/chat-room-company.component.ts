@@ -20,15 +20,12 @@ export interface ChatRoomMessage{
   replyToId: number|null
   edited: boolean
   createdAt: string
-  file?: {
-    filename: string
-    type: string
-    data: string|null,
-    imageWidth?: number
-    imageHeight?: number
-  },
+
   imageWidth?: number
   imageHeight?: number
+  type?: string
+  fileName?: string
+  fileData?: any
 }
 
 @Component({
@@ -100,27 +97,20 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     // this.websocketService.stompClient.connect({}, ()=>{
       this.subTopicRoom = this.websocketService.stompClient.subscribe(`/topic/room/${this.idParam}`, (messages: any) => {
         const messageContent: ChatRoomMessage = JSON.parse(messages.body)
-        console.log(messageContent)
+        // console.log(messageContent)
 
-        let file = null
-          // if (messageContent.imageWidth && messageContent.imageHeight) {
-            file = {
-              filename: messageContent.file?.filename,
-              type: messageContent.file?.type,
-              data: null,
-              imageWidth: messageContent.imageWidth,
-              imageHeight: messageContent.imageHeight
-            }
-          // }
-
-        let mappingMessage = {
+        let mappingMessage: ChatRoomMessage = {
           id: messageContent.id,
           roomId: messageContent.roomId,
           userId: messageContent.userId,
           username: this.companyManagementService.companyUserList?.find(user => user.id == messageContent.userId)?.username!,
           message: messageContent.message,
           fileId: messageContent.fileId,
-          file: file,
+          type: messageContent.type,
+          fileName: messageContent.fileName,
+          fileData: null,
+          imageWidth: messageContent.imageWidth,
+          imageHeight: messageContent.imageHeight,
           replyToId: messageContent.replyToId,
           edited: messageContent.edited,
           createdAt: messageContent.createdAt
@@ -130,8 +120,8 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
         console.log(mappingMessage)
 
-        if (mappingMessage.fileId) {
-          this.getFileId(mappingMessage.fileId, mappingMessage.file) 
+        if (mappingMessage.type?.startsWith('image')) {
+          this.getFileId(mappingMessage) 
         }
 
         if (this.userDataService.getId() == messageContent.userId) {
@@ -150,25 +140,19 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
         let messageArray = this.messages
 
         messageContent.forEach((element: ChatRoomMessage) => {
-          // console.log(element)
 
-          let file = null
-          file = {
-            filename: element.file?.filename,
-            type: element.file?.type,
-            data: null,
-            imageWidth: element.imageWidth,
-            imageHeight: element.imageHeight
-          }
-
-          let mappingMessage = {
+          let mappingMessage: ChatRoomMessage = {
             id: element.id,
             roomId: element.roomId,
             userId: element.userId,
             username: this.companyManagementService.companyUserList?.find(user => user.id == element.userId)?.username!,
             message: element.message,
             fileId: element.fileId,
-            file: file,
+            type: element.type,
+            fileName: element.fileName,
+            fileData: null,
+            imageWidth: element.imageWidth,
+            imageHeight: element.imageHeight,
             replyToId: element.replyToId,
             edited: element.edited,
             createdAt: element.createdAt
@@ -177,8 +161,10 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
           // console.log(mappingMessage)
           pullMessageArray.push(mappingMessage)
 
-          if (mappingMessage.fileId) {
-            this.getFileId(mappingMessage.fileId, mappingMessage.file) 
+          // console.log(mappingMessage)
+
+          if (mappingMessage.type?.startsWith('image')) {
+            this.getFileId(mappingMessage) 
           }
         });
 
@@ -590,30 +576,14 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
 
   subGetFile?: Subscription
 
-  getFileId(fileId: number, file: any){
+  getFileId(message: ChatRoomMessage){
     // console.log('pobieram plik dla: ' + message)
-    this.subGetFile = this.fileService.getFile(fileId!).subscribe({
+    this.subGetFile = this.fileService.getFile(message.fileId!).subscribe({
       next: (response) => {
         if(response.body){
-
-          // console.log(response.body)
-
           if (response.body?.type.startsWith('image')) {
-            file.data = 'data:' + response.body?.type + ';base64,' + response.body?.data,
-            file.filename = response.body?.filename!,
-            file.type = response.body?.type!
+            message.fileData = 'data:' + response.body?.type + ';base64,' + response.body?.data
           }
-          else {
-            console.log(response.body)
-            // file.data = 'data:' + response.body?.type + ';base64,' + response.body?.data,
-            file.filename = response.body?.filename!,
-            file.type = response.body?.type!
-          }
-          
-
-        }
-        else{
-          // this.customErrorUploadFile! = 'Brak obiektu odpowiedzi';
         }
       },
       error: (errorResponse) => {

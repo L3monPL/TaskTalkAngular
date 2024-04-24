@@ -31,19 +31,19 @@
                             }
                             <div class="message_container">
                                 <!-- {{item.message}} -->
-                                @if (item.file?.imageWidth && item.file?.imageHeight) {
+                                @if (item.imageWidth && item.imageHeight) {
                                     <div
-                                    [style.width.px]="item.file?.imageWidth"
-                                    [style.height.px]="getHeidhtImagePlaceholder(item.file?.imageHeight!, item.file?.imageWidth!, elementRef)"
+                                    [style.width.px]="item.imageWidth"
+                                    [style.height.px]="getHeidhtImagePlaceholder(item.imageHeight!, item.imageWidth!, elementRef)"
                                     class="image_data_placeholder" #elementRef>
-                                    @if (item.file?.data) {
-                                        <img loading="lazy" [src]="item.file!.data" alt="">
+                                    @if (item?.fileData) {
+                                        <img loading="lazy" [src]="item.fileData" alt="">
                                     }
                                     </div>
                                 }
-                                @if (!item.file?.imageWidth && !item.file?.imageHeight && item.fileId) {
+                                @if (!item?.imageWidth && !item?.imageHeight && item.fileId) {
                                     <div class="file_view_container">
-                                        {{item.file.filename}}
+                                        {{item.fileName}}
                                     </div>
                                 }
                                 <!-- @if (item.file?.data) {
