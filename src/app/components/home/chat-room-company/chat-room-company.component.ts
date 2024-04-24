@@ -210,12 +210,12 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
     this.websocketService.stompClient.send(`/app/ws/room/${this.idParam}/message`, {}, JSON.stringify(0))
   }
 
-  sendMessage(event: any){
+  sendMessage(event: any, action?: string){
     console.log('test send message')
     // if (!this.inputMessage?.trim()) {
     //   return
     // }
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (event.key === "Enter" && !event.shiftKey || action == 'by-button') {
   
       if (this.filesList?.length) {
         this.postMessageWithFileUpload()
@@ -555,9 +555,19 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
       this.subUploadFile = this.fileService.postMessageWithFile(this.idParam!, this.filesList![0].file, this.inputMessage!).subscribe({
         next: (response) => {
           if(response){
+
+            this.filesList?.splice(0, 1)
+            let currentFileListLength = this.filesList?.length
+
             this.inputMessage = ''
             this.resetTextAreaStyle()
-            this.closeFileListPanel()
+
+            if (currentFileListLength == 0) {
+              this.closeFileListPanel() 
+            }
+            if (currentFileListLength != 0) {
+              this.postMessageWithFileUpload()
+            }
           }
           else{
             this.customErrorUploadFile! = 'Brak obiektu odpowiedzi';
