@@ -164,6 +164,7 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
           // console.log(mappingMessage)
 
           if (mappingMessage.type?.startsWith('image')) {
+            console.log(mappingMessage.id)
             this.getFileId(mappingMessage) 
           }
         });
@@ -587,12 +588,13 @@ export class ChatRoomCompanyComponent implements OnInit, OnDestroy{
   subGetFile?: Subscription
 
   getFileId(message: ChatRoomMessage){
-    // console.log('pobieram plik dla: ' + message)
+    console.log('pobieram plik dla: ' + message.fileId)
     this.subGetFile = this.fileService.getFile(message.fileId!).subscribe({
       next: (response) => {
         if(response.body){
           if (response.body?.type.startsWith('image')) {
             message.fileData = 'data:' + response.body?.type + ';base64,' + response.body?.data
+            console.log(message)
           }
         }
       },
